@@ -12,13 +12,19 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class Game extends Activity implements OnTouchListener{
 
 	private Button b_up,b_down,b_left,b_right;
 	private ImageView tank;
 	private String kierunek="nic";
+	FrameLayout game;
+	RelativeLayout GameButtons;
+	private GamePanel gameView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,7 +32,25 @@ public class Game extends Activity implements OnTouchListener{
 	        requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        //set to full screen
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(new GamePanel(this));
+	        
+	//	setContentView(new GamePanel(this));
+			game = new FrameLayout(this);  
+			gameView = new GamePanel(this); 
+			GameButtons = new RelativeLayout(this);  
+		  RelativeLayout GameButtons = new RelativeLayout(this);
+		  Button butOne = new Button(this);  
+		  butOne.setText("PRZYCISKDZIALA");  
+		  butOne.setId(123456);
+		  RelativeLayout.LayoutParams b1 = new LayoutParams( RelativeLayout.LayoutParams.WRAP_CONTENT,  RelativeLayout.LayoutParams.WRAP_CONTENT); 
+		  RelativeLayout.LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,RelativeLayout.LayoutParams.FILL_PARENT);  
+		  GameButtons.setLayoutParams(params);  
+		  GameButtons.addView(butOne);       
+		  b1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);  
+		  b1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		  butOne.setLayoutParams(b1); 
+		  game.addView(gameView);  
+		  game.addView(GameButtons);  
+		  setContentView(game); 
 //		init();
 		
 	}
