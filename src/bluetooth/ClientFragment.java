@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,8 +56,9 @@ public class ClientFragment extends Fragment implements ListAdapter {
 		listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, int position, long id) 
             {
+            	polacz(((TextView) view).getText().toString());
             	Toast.makeText(getActivity().getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-            }
+            }			
         });
     
 		b1.setOnClickListener(new OnClickListener() {
@@ -138,6 +140,12 @@ public class ClientFragment extends Fragment implements ListAdapter {
 				strArr.add(device.getAddress());
 			}
 		}
+	}
+	private void polacz(String MAC) 
+	{
+		Intent btSettingsIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+	    startActivityForResult(btSettingsIntent, getActivity().BIND_ABOVE_CLIENT);
+		
 	}
 
 	@Override
