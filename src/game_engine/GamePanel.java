@@ -9,6 +9,7 @@ import activities_menu.MainActivity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +22,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Background bg;
     private Player player;
     private JoystickView joystick;
+	Handler handgamepanel ;
     public GamePanel(Context context)
     {
         super(context);
