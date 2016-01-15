@@ -1,10 +1,15 @@
 package game_engine;
 
+import java.io.IOException;
+
 import com.example.tanks.R;
 import com.zerokol.views.JoystickView;
 import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import android.app.Activity;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +35,7 @@ public class Game extends Activity implements OnTouchListener{
 	RelativeLayout GameButtons;
 	public JoystickView joystick;
 	private GamePanel gameView;
+	private MediaPlayer mPlayer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,7 +54,7 @@ public class Game extends Activity implements OnTouchListener{
 		game.addView(gameView);  
 		game.addView(GameButtons);  
 		setContentView(game);
-		
+		music();
 		/** NIE WIEM CZEMU TO NIE DZIALA POMOCY APKA SIE SYPIE:(**/
 //		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
 //			@Override
@@ -88,6 +94,29 @@ public class Game extends Activity implements OnTouchListener{
 //		}, JoystickView.DEFAULT_LOOP_INTERVAL);
 	}
 	
+
+	private void music() 
+	{
+		// TODO Auto-generated method stub
+		 mPlayer = new MediaPlayer();
+	       try {
+	    	   AssetManager mngr = getAssets();
+	    	   AssetFileDescriptor afd = mngr.openFd("music.mp3");
+	          mPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+	          mPlayer.prepare();
+		} catch (IllegalArgumentException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();}
+	       mPlayer.start();
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -135,5 +164,17 @@ public class Game extends Activity implements OnTouchListener{
 		}
 		kierunek="nic";
 		return false;
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		mPlayer.pause();
+		super.onPause();
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		mPlayer.start();
+		super.onResume();
 	}
 }

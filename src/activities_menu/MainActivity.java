@@ -2,7 +2,6 @@ package activities_menu;
 
 import com.example.tanks.R;
 
-import view.JoystickViewDemoActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +12,12 @@ import bluetooth.Blutacz_main;
 import game_engine.Game;
 
 public class MainActivity extends Activity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+			
 	}
 
 	@Override
@@ -51,5 +51,21 @@ public class MainActivity extends Activity {
 		}
 	
 		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+	@Override
+	protected void onDestroy() {
+		
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub		
+		super.onResume();
 	}
 }
