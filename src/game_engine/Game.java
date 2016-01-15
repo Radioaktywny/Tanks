@@ -11,10 +11,13 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,16 +28,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Game extends Activity implements OnTouchListener{
 
 	private Button b_up,b_down,b_left,b_right;
 	private ImageView tank;
 	private String kierunek="nic";
+	private String Ostatni_ruch_czolgu;
 	FrameLayout game;
 	RelativeLayout GameButtons;
 	public JoystickView joystick;
 	private GamePanel gameView;
+	
+	Handler handgame ;
 	private MediaPlayer mPlayer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,54 +54,29 @@ public class Game extends Activity implements OnTouchListener{
 		game = new FrameLayout(this);  
 		gameView = new GamePanel(this); 
 		GameButtons =new RelativeLayout(this);
-		RelativeLayout GameButtons = new RelativeLayout(this);
+		RelativeLayout GameButtons = new RelativeLayout(this);	
 		View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		GameButtons.addView(v);
 		game.addView(gameView);  
 		game.addView(GameButtons);  
 		setContentView(game);
+		init_joistick((JoystickView) findViewById(R.id.joystickView));
 		music();
-		/** NIE WIEM CZEMU TO NIE DZIALA POMOCY APKA SIE SYPIE:(**/
-//		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
+	//	init_button_strzal((Button) findViewById(R.id.strzal));
+}
+//	private void init_button_strzal(Button strzal) {
+//		strzal.setOnClickListener(new OnClickListener() {
 //			@Override
-//			public void onValueChanged(int angle, int power, int direction) {
-//				// TODO Auto-generated method stub
-//			//	angleTextView.setText(" " + String.valueOf(angle) + "°");
-//			//	powerTextView.setText(" " + String.valueOf(power) + "%");
-//				switch (direction) {
-//				case JoystickView.FRONT:
-//					gameView.steruj("gora");
-//					break;
-//				case JoystickView.FRONT_RIGHT:
-//					//directionTextView.setText("R.string.front_right_lab");
-//					break;
-//				case JoystickView.RIGHT:
-//					gameView.steruj("prawa");
-//					break;
-//				case JoystickView.RIGHT_BOTTOM:
-//					//directionTextView.setText("R.string.right_bottom_lab");
-//					break;
-//				case JoystickView.BOTTOM:
-//					gameView.steruj("dol");
-//					break;
-//				case JoystickView.BOTTOM_LEFT:
-//					//directionTextView.setText("R.string.bottom_left_lab");
-//					break;
-//				case JoystickView.LEFT:
-//					gameView.steruj("lewa");
-//					break;
-//				case JoystickView.LEFT_FRONT:
-//					//directionTextView.setText("R.string.left_front_lab");
-//					break;
-//				default:
-//					//directionTextView.setText("R.string.center_lab");
-//				}
+//			public void onClick(View v) {
+//				gameView.strzel(Ostatni_ruch_czolgu);				
+//				Toast toast = Toast.makeText(getApplicationContext(), "dziala", Toast.LENGTH_SHORT);
+//				toast.show();
+//				
 //			}
-//		}, JoystickView.DEFAULT_LOOP_INTERVAL);
-	}
-	
-
+//		});
+//		
+//	}
 	private void music() 
 	{
 		// TODO Auto-generated method stub
@@ -116,8 +98,50 @@ public class Game extends Activity implements OnTouchListener{
 			e.printStackTrace();}
 	       mPlayer.start();
 	}
-
-
+	private void init_joistick(JoystickView joystick){
+		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
+			@Override
+			public void onValueChanged(int angle, int power, int direction) {
+				switch (direction) {
+				case JoystickView.FRONT:
+					Ostatni_ruch_czolgu="gora";
+					gameView.steruj("gora");
+					break;
+				case JoystickView.FRONT_RIGHT:
+					gameView.steruj("");
+					Ostatni_ruch_czolgu="";
+					break;
+				case JoystickView.LEFT:
+					gameView.steruj("prawa");
+					Ostatni_ruch_czolgu="prawa";
+					break;
+				case JoystickView.RIGHT_BOTTOM:
+					gameView.steruj("");
+					Ostatni_ruch_czolgu="";
+					break;
+				case JoystickView.BOTTOM:
+					Ostatni_ruch_czolgu="dol";
+					gameView.steruj("dol");
+					
+					break;
+				case JoystickView.BOTTOM_LEFT:
+					Ostatni_ruch_czolgu="";
+					gameView.steruj("");
+					break;
+				case JoystickView.RIGHT:
+					Ostatni_ruch_czolgu="lewa";
+					gameView.steruj("lewa");
+					break;
+				case JoystickView.LEFT_FRONT:
+					gameView.steruj("");
+					break;
+				default:
+					gameView.steruj("nie rob nic prosze cie");
+				}
+			}
+		}, JoystickView.DEFAULT_LOOP_INTERVAL);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -138,31 +162,9 @@ public class Game extends Activity implements OnTouchListener{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
 	@Override
-	public boolean onTouch(View v, MotionEvent event) 
-	{
-		if(v.getId()==R.id.button2)
-		{
-			kierunek="up";
-			return true;
-		}
-		else if(v.getId()==R.id.button3)
-		{
-			kierunek="left";
-			return true;
-		}
-		else if(v.getId()==R.id.button4)
-		{
-			kierunek="down";
-			return true;
-		}
-		else if(v.getId()==R.id.button5)
-		{
-			kierunek="right";
-			return true;
-		}
-		kierunek="nic";
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 	@Override
@@ -172,9 +174,43 @@ public class Game extends Activity implements OnTouchListener{
 		super.onPause();
 	}
 	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		mPlayer.stop();
+		super.onDestroy();
+	}
+	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		mPlayer.start();
 		super.onResume();
 	}
 }
+
+//	@Override
+//	public boolean onTouch(View v, MotionEvent event) 
+//	{
+////		if(v.getId()==R.id.button2)
+////		{
+////			kierunek="up";
+////			return true;
+////		}
+////		else if(v.getId()==R.id.button3)
+////		{
+////			kierunek="left";
+////			return true;
+////		}
+////		else if(v.getId()==R.id.button4)
+////		{
+////			kierunek="down";
+////			return true;
+////		}
+////		else if(v.getId()==R.id.button5)
+////		{
+////			kierunek="right";
+////			return true;
+////		}
+////		kierunek="nic";
+////		return false;
+////	}
+//}
