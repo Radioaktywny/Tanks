@@ -28,10 +28,20 @@
         </activity>
         <activity
             android:name="bluetooth.Blutaczmenu"
-            android:label="@string/title_activity_blutaczmenu" >
+             >
         </activity>
-        
+        <activity
+            android:name="bluetooth.Blutacz_main"
+            android:label="@string/title_activity_blutaczmenu">
+            
+        </activity>
+        <activity
+            android:name=".SerwerMenu"
+            android:label="@string/title_activity_serwer_menu" >
+        </activity>
     </application>
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
 </manifest>

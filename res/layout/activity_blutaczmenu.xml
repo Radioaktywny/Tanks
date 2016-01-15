@@ -1,3 +1,5 @@
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Pokaż się" />
+        android:text="oczekuj na połączenie" />
 
     <TextView
         android:id="@+id/textView2"
@@ -60,7 +62,7 @@
         android:layout_alignBaseline="@+id/button4"
         android:layout_alignBottom="@+id/button4"
         android:layout_toRightOf="@+id/button4"
-        android:text="Bądź clientem" />
+        android:text="połącz się" />
 
     <TextView
         android:id="@+id/textView3"

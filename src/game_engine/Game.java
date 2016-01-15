@@ -6,8 +6,6 @@ import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,7 +30,6 @@ public class Game extends Activity implements OnTouchListener{
 	RelativeLayout GameButtons;
 	public JoystickView joystick;
 	private GamePanel gameView;
-	Handler handgame ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,51 +41,54 @@ public class Game extends Activity implements OnTouchListener{
 		game = new FrameLayout(this);  
 		gameView = new GamePanel(this); 
 		GameButtons =new RelativeLayout(this);
-		RelativeLayout GameButtons = new RelativeLayout(this);	
+		RelativeLayout GameButtons = new RelativeLayout(this);
 		View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		GameButtons.addView(v);
 		game.addView(gameView);  
 		game.addView(GameButtons);  
 		setContentView(game);
-		init_joistick((JoystickView) findViewById(R.id.joystickView));					
-}
-	void init_joistick(JoystickView joystick){
-		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
-			@Override
-			public void onValueChanged(int angle, int power, int direction) {
-				switch (direction) {
-				case JoystickView.FRONT:
-					gameView.steruj("gora");
-					break;
-				case JoystickView.FRONT_RIGHT:
-					gameView.steruj("");
-					break;
-				case JoystickView.LEFT:
-					gameView.steruj("prawa");
-					break;
-				case JoystickView.RIGHT_BOTTOM:
-					gameView.steruj("");
-					break;
-				case JoystickView.BOTTOM:
-					gameView.steruj("dol");
-					break;
-				case JoystickView.BOTTOM_LEFT:
-					gameView.steruj("");
-					break;
-				case JoystickView.RIGHT:
-					gameView.steruj("lewa");
-					break;
-				case JoystickView.LEFT_FRONT:
-					gameView.steruj("");
-					break;
-				default:
-					gameView.steruj("nie rob nic prosze cie");
-				}
-			}
-		}, JoystickView.DEFAULT_LOOP_INTERVAL);
+		
+		/** NIE WIEM CZEMU TO NIE DZIALA POMOCY APKA SIE SYPIE:(**/
+//		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
+//			@Override
+//			public void onValueChanged(int angle, int power, int direction) {
+//				// TODO Auto-generated method stub
+//			//	angleTextView.setText(" " + String.valueOf(angle) + "°");
+//			//	powerTextView.setText(" " + String.valueOf(power) + "%");
+//				switch (direction) {
+//				case JoystickView.FRONT:
+//					gameView.steruj("gora");
+//					break;
+//				case JoystickView.FRONT_RIGHT:
+//					//directionTextView.setText("R.string.front_right_lab");
+//					break;
+//				case JoystickView.RIGHT:
+//					gameView.steruj("prawa");
+//					break;
+//				case JoystickView.RIGHT_BOTTOM:
+//					//directionTextView.setText("R.string.right_bottom_lab");
+//					break;
+//				case JoystickView.BOTTOM:
+//					gameView.steruj("dol");
+//					break;
+//				case JoystickView.BOTTOM_LEFT:
+//					//directionTextView.setText("R.string.bottom_left_lab");
+//					break;
+//				case JoystickView.LEFT:
+//					gameView.steruj("lewa");
+//					break;
+//				case JoystickView.LEFT_FRONT:
+//					//directionTextView.setText("R.string.left_front_lab");
+//					break;
+//				default:
+//					//directionTextView.setText("R.string.center_lab");
+//				}
+//			}
+//		}, JoystickView.DEFAULT_LOOP_INTERVAL);
 	}
 	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

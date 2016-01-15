@@ -48,7 +48,9 @@ public class Blutaczmenu extends Activity {
 		b.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				dajSieWykryc();				
+				dajSieWykryc();		
+				t2.setText("Uruchomiono serwer");
+				new SerwerBluetooth().start();
 			}
 		});
 		b2.setOnClickListener(new OnClickListener() {			
@@ -61,12 +63,12 @@ public class Blutaczmenu extends Activity {
 		b3.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				pokazSparowane();				
 			}
 		});
 		b4.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {		
+				
 				t2.setText("Jo sem serwer!");
 				new SerwerBluetooth().start();
 			}
@@ -75,6 +77,8 @@ public class Blutaczmenu extends Activity {
 			@Override
 			public void onClick(View v) {
 				t2.setText("Jo sem client!");
+				pokazSparowane();				
+
 				BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
 				BluetoothDevice serwer = ba.getRemoteDevice(et1.getText().toString());      
 				new ClientBluetooth(serwer).start();
