@@ -2,6 +2,7 @@ package activities_menu;
 
 import com.example.tanks.R;
 
+import view.JoystickViewDemoActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
 	public void startgame(View view)
 	{
         Intent activity= new Intent(MainActivity.this,Game.class);
+		//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
 		startActivity(activity); 
 		
 	}

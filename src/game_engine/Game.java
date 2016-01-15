@@ -1,6 +1,8 @@
 package game_engine;
 
 import com.example.tanks.R;
+import com.zerokol.views.JoystickView;
+import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,8 +16,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 public class Game extends Activity implements OnTouchListener{
 
@@ -24,6 +28,7 @@ public class Game extends Activity implements OnTouchListener{
 	private String kierunek="nic";
 	FrameLayout game;
 	RelativeLayout GameButtons;
+	public JoystickView joystick;
 	private GamePanel gameView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,42 +37,57 @@ public class Game extends Activity implements OnTouchListener{
 	        requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        //set to full screen
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	        
-	//	setContentView(new GamePanel(this));
-			game = new FrameLayout(this);  
-			gameView = new GamePanel(this); 
-			GameButtons = new RelativeLayout(this);  
-		  RelativeLayout GameButtons = new RelativeLayout(this);
-		  Button butOne = new Button(this);  
-		  butOne.setText("PRZYCISKDZIALA");  
-		  butOne.setId(123456);
-		  RelativeLayout.LayoutParams b1 = new LayoutParams( RelativeLayout.LayoutParams.WRAP_CONTENT,  RelativeLayout.LayoutParams.WRAP_CONTENT); 
-		  RelativeLayout.LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,RelativeLayout.LayoutParams.FILL_PARENT);  
-		  GameButtons.setLayoutParams(params);  
-		  GameButtons.addView(butOne);       
-		  b1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);  
-		  b1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-		  butOne.setLayoutParams(b1); 
-		  game.addView(gameView);  
-		  game.addView(GameButtons);  
-		  setContentView(game); 
-//		init();
+ 
+		game = new FrameLayout(this);  
+		gameView = new GamePanel(this); 
+		GameButtons =new RelativeLayout(this);
+		RelativeLayout GameButtons = new RelativeLayout(this);
+		View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);
+		joystick = (JoystickView) findViewById(R.id.joystickView);
+		GameButtons.addView(v);
+		game.addView(gameView);  
+		game.addView(GameButtons);  
+		setContentView(game);
 		
+		/** NIE WIEM CZEMU TO NIE DZIALA POMOCY APKA SIE SYPIE:(**/
+//		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
+//			@Override
+//			public void onValueChanged(int angle, int power, int direction) {
+//				// TODO Auto-generated method stub
+//			//	angleTextView.setText(" " + String.valueOf(angle) + "°");
+//			//	powerTextView.setText(" " + String.valueOf(power) + "%");
+//				switch (direction) {
+//				case JoystickView.FRONT:
+//					gameView.steruj("gora");
+//					break;
+//				case JoystickView.FRONT_RIGHT:
+//					//directionTextView.setText("R.string.front_right_lab");
+//					break;
+//				case JoystickView.RIGHT:
+//					gameView.steruj("prawa");
+//					break;
+//				case JoystickView.RIGHT_BOTTOM:
+//					//directionTextView.setText("R.string.right_bottom_lab");
+//					break;
+//				case JoystickView.BOTTOM:
+//					gameView.steruj("dol");
+//					break;
+//				case JoystickView.BOTTOM_LEFT:
+//					//directionTextView.setText("R.string.bottom_left_lab");
+//					break;
+//				case JoystickView.LEFT:
+//					gameView.steruj("lewa");
+//					break;
+//				case JoystickView.LEFT_FRONT:
+//					//directionTextView.setText("R.string.left_front_lab");
+//					break;
+//				default:
+//					//directionTextView.setText("R.string.center_lab");
+//				}
+//			}
+//		}, JoystickView.DEFAULT_LOOP_INTERVAL);
 	}
-
-	private void init() {
-		b_up=(Button) findViewById(R.id.button2);
-		b_down=(Button) findViewById(R.id.button4);
-		b_left=(Button) findViewById(R.id.button3);
-		b_right=(Button) findViewById(R.id.button5);
-		tank=(ImageView) findViewById(R.id.imageView1);
-		b_up.setOnTouchListener(this);
-		b_down.setOnTouchListener(this);
-		b_left.setOnTouchListener(this);
-		b_right.setOnTouchListener(this);
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +109,7 @@ public class Game extends Activity implements OnTouchListener{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) 
 	{

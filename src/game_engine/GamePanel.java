@@ -2,7 +2,10 @@ package game_engine;
 
 
 import com.example.tanks.R;
+import com.zerokol.views.JoystickView;
+import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
+import activities_menu.MainActivity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,17 +20,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainThread thread;
     private Background bg;
     private Player player;
+    private JoystickView joystick;
     public GamePanel(Context context)
     {
         super(context);
-        
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
-
+        joystick = (JoystickView) findViewById(R.id.joystickView);
         //make gamePanel focusable so it can handle events
         setFocusable(true);
+ 
     }
 
   @Override
@@ -60,45 +64,77 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
       
 
   }
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-    	if(event.getAction()==MotionEvent.ACTION_DOWN)
-    	{
-    		System.out.println(event.getRawY()+"  "+event.getRawX());
-    		
-    		System.out.println(getHeight()+" " +getWidth());
-    		if(event.getRawY()>(getHeight()-200))
-    		{
-    			if(event.getRawX()<((getWidth()/4)))
-    			{
-    				player.setLeft(true);   			
-        			return true;        	
-    			}
-    			else if(event.getRawX()>(getWidth()-(getWidth()/4)))
-    			{
-    				player.setRight(true);   			
-        			return true;        	
-    			}
-    			else 
-    			{
-    				player.setDown(true);   			
-        			return true;   
-    			}
-    		}
-    		else if(event.getRawY()>(getHeight()-400))
-    		{
-    			player.setUp(true);
-    			return true;
-    		}    		
-    		   		
-    	}
-    	if(event.getAction()==MotionEvent.ACTION_UP)
-    	{
-    		player.setNo();	   	
-    		return super.onTouchEvent(event);
-    	}
-    	return false;
+  @Override
+  public boolean onTouchEvent(MotionEvent event)
+  {
+  	if(event.getAction()==MotionEvent.ACTION_DOWN)
+  	{
+  		System.out.println(event.getRawY()+"  "+event.getRawX());
+  		
+  		System.out.println(getHeight()+" " +getWidth());
+  		if(event.getRawY()>(getHeight()-200))
+  		{
+  			if(event.getRawX()<((getWidth()/4)))
+  			{
+  				player.setLeft(true);   			
+      			return true;        	
+  			}
+  			else if(event.getRawX()>(getWidth()-(getWidth()/4)))
+  			{
+  				player.setRight(true);   			
+      			return true;        	
+  			}
+  			else 
+  			{
+  				player.setDown(true);   			
+      			return true;   
+  			}
+  		}
+  		else if(event.getRawY()>(getHeight()-400))
+  		{
+  			player.setUp(true);
+  			return true;
+  		}    		
+  		   		
+  	}
+  	if(event.getAction()==MotionEvent.ACTION_UP)
+  	{
+  		player.setNo();	   	
+  		return super.onTouchEvent(event);
+  	}
+  	return false;
+  }
+    	
+        public void steruj(String steruj)
+        {	
+        
+        	if(steruj.equals("lewa"))
+        	{
+        				player.setLeft(true);   			
+            			      	
+        	}
+        	else if(steruj.equals("prawa"))
+        	{
+        				player.setRight(true);   			
+            		        	
+        	}
+        	else if(steruj.equals("dol"))
+        	{
+        				player.setDown(true);   			
+            		  
+        	}
+        
+            else if(steruj.equals("gora"))
+            {
+        			player.setUp(true);
+        		
+            }    		
+            else
+            {
+            	player.setNo();
+            }
+        	
+    	
     }
     public void update()
     {
@@ -112,6 +148,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 
     }
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Override
     public void draw(Canvas canvas)
     {
