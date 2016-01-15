@@ -32,15 +32,15 @@ import android.widget.Toast;
 
 public class ClientFragment extends Fragment implements ListAdapter {
 	private ListView listView;
-	private ArrayList<String> strArr = new ArrayList<String>();
+	private ArrayList<String> sparowane = new ArrayList<String>();
+	private ArrayList<String> niesparowane = new ArrayList<String>();
 	private Button b3;
 	private Button b1;
 	private ArrayAdapter<String> adaArr;
-	private boolean czy_wyswietlic=false;
+	private boolean czy_wyswietlic_niesparowane=false;
 	private ProgressBar progres;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		strArr.add("dsadsa");
 		View rootView = inflater.inflate(R.layout.client_widok, container, false);
 		init(rootView);
 		return rootView;
@@ -54,7 +54,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 		progres.setVisibility(0x000008);
 		
 		listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View view, int position, long id) 
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
             {
             	polacz(((TextView) view).getText().toString());
             	Toast.makeText(getActivity().getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
@@ -66,7 +66,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 			@Override
 			public void onClick(View v) {
 				
-				wykryjInne(czy_wyswietlic);
+				wykryjInne(czy_wyswietlic_niesparowane);
 
 			}
 		});
@@ -89,63 +89,76 @@ public class ClientFragment extends Fragment implements ListAdapter {
 				String status = "";
 				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 					status = "nie sparowane";
-					strArr.add(device.getAddress());
+					niesparowane.add(device.getAddress());
 				} else {
 					status = "sparowane";
-					strArr.add(device.getAddress());
+					sparowane.add(device.getAddress());
 				}
 				Log.d("INFO",
 						"znaleziono urządzenie: " + device.getName() + " - " + device.getAddress() + " - " + status);
 			}
 		}
 	};
+	
 
-	public void wykryjInne(boolean czy_wyswietlic) {
-		if(czy_wyswietlic)
+	public void wykryjInne(boolean czy_wyswietlic_niesparowane) {
+		if(czy_wyswietlic_niesparowane)
 		{
-		ArrayList<String> cache=strArr;
+		ArrayList<String> cache=niesparowane;
 		
 		adaArr = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1,cache);
 		adaArr.notifyDataSetChanged();
 		listView.setAdapter(adaArr);
-		this.czy_wyswietlic=false;
-		b1.setText("szukaj urzadzen");
+		this.czy_wyswietlic_niesparowane=false;
+		b1.setText("szukaj niesparowanych urzadzen");
 		progres.setVisibility(0x000008);
 		}
 		else
 		{
-		strArr.clear();
+		niesparowane.clear();
 		Log.d("INFO","Szukam innych urządzeń (ok 12s)");
 		IntentFilter filtr = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		getActivity().registerReceiver(odbiorca, filtr);
 		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
 		ba.startDiscovery();
-		this.czy_wyswietlic=true;
+		this.czy_wyswietlic_niesparowane=true;
 		b1.setText("pokaz znalezione urzadzenia");
 		progres.setVisibility(1);
 		}
 		
 	}
 	public void pokazSparowane() {
-		/*
-		 * Wyświetlanie listy sparowanych urządzeń, niezależnie od tego czy
-		 * są właśnie podłączone czy w ogóle włączone.
-		 */
-		Log.d("INFO", "Sparowane dla tego urządzenia");
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-		if (pairedDevices.size() > 0) {
-			for (BluetoothDevice device : pairedDevices) {
-				Log.d("INFO", device.getName() + " - " + device.getAddress());
-				strArr.add(device.getAddress());
+		
+			sparowane.clear();
+			Log.d("INFO", "Sparowane dla tego urządzenia");
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+			if (pairedDevices.size() > 0) {
+				for (BluetoothDevice device : pairedDevices) {
+					Log.d("INFO", device.getName() + " - " + device.getAddress());
+					sparowane.add(device.getAddress());
+				}
 			}
-		}
+			adaArr = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1,sparowane);
+			adaArr.notifyDataSetChanged();
+			listView.setAdapter(adaArr);
+					
 	}
 	private void polacz(String MAC) 
 	{
+		if(sparowane.contains(MAC))
+		{
+		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
+		BluetoothDevice serwer = ba.getRemoteDevice(MAC);      
+		new ClientBluetooth(serwer).start();
+		}
+		else
+		{
+			//NIE WIEM CO TU ZROBIC NO ALE XD JEST TAK JAK JEST
 		Intent btSettingsIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-	    startActivityForResult(btSettingsIntent, getActivity().BIND_ABOVE_CLIENT);
-		
+	    getActivity();
+		startActivityForResult(btSettingsIntent, Context.BIND_ABOVE_CLIENT);
+		}
 	}
 
 	@Override

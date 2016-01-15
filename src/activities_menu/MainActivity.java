@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import bluetooth.Blutacz_main;
-import bluetooth.Blutaczmenu;
 import game_engine.Game;
 
 public class MainActivity extends Activity {

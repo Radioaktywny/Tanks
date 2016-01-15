@@ -3,11 +3,15 @@ package bluetooth;
 import com.example.tanks.R;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.ActionBar.Tab;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 public class Blutacz_main extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -22,7 +26,13 @@ public class Blutacz_main extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabelowy);
-
+		
+		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
+		Log.d("INFO","Twój adres urządzenia: "+ba.getAddress());
+		if(!ba.isEnabled()){
+			Intent i=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(i, 1);
+		}
 		// Initilization
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
@@ -67,6 +77,13 @@ public class Blutacz_main extends FragmentActivity implements
 	}
 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+	}
+	@Override
+	protected void onActivityResult(int requestCode,int resultCode,Intent i){
+		if(resultCode==Activity.RESULT_OK){
+			Log.d("INFO","Mamy zgodę!");
+			BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();					
+		}
 	}
 
 }

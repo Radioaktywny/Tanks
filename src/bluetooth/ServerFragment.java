@@ -11,15 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class ServerFragment extends Fragment implements OnClickListener{
-	TextView t2;
-	Button b2;
-	private Button b3;
-
+	private Button b2;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -33,7 +28,6 @@ public class ServerFragment extends Fragment implements OnClickListener{
 			@Override
 			public void onClick(View v) {
 				dajSieWykryc();		
-				//t2.setText("Uruchomiono serwer");
 				new SerwerBluetooth().start();
 				// TODO Auto-generated method stub
 				
@@ -42,16 +36,8 @@ public class ServerFragment extends Fragment implements OnClickListener{
 		 
 		return rootView;
 	}
-	public void wykryj(View view)
-	{
-		
-		
-		
-		
-		
-	}
-	public void dajSieWykryc(){
-		Log.d("INFO","Daję się wykryć!");		
+		public void dajSieWykryc(){
+		Log.d("INFO","DAJ SIE WYKRY�");		
 		Intent pokazSie = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 		pokazSie.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
 		startActivity(pokazSie);

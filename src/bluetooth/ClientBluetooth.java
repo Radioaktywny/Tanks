@@ -24,12 +24,12 @@ public class ClientBluetooth extends Thread {
  
     public void run() {
          try {     
-        	Log.d("INFO","PrÃ³ba poÅ‚Ä…czenia....");
+        	Log.d("INFO","Próba po³¹czenia");
             mmSocket.connect();
-            Log.d("INFO","PoÅ‚Ä…czono z serwerem!");
+            Log.d("INFO","Po³¹czono z socketem");
             BufferedReader in = new BufferedReader(new InputStreamReader(mmSocket.getInputStream()));
             String input = in.readLine();  
-            Log.d("INFO","Serwer mÃ³wi: "+input);
+            Log.d("INFO","Serwer mówi: "+input);
             
         } catch (Exception ce) {
             try {
