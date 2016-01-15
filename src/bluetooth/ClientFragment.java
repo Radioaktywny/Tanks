@@ -1,6 +1,6 @@
 package bluetooth;
 
-
+import java.util.ArrayList;
 import java.util.Set;
 
 import com.example.tanks.R;
@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,75 +19,196 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class ClientFragment extends Fragment {
-
+public class ClientFragment extends Fragment implements ListAdapter {
+	private ListView listView;
+	private ArrayList<String> strArr = new ArrayList<String>();
 	private Button b3;
 	private Button b1;
-
+	private ArrayAdapter<String> adaArr;
+	private boolean czy_wyswietlic=false;
+	private ProgressBar progres;
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) 
-	{
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		strArr.add("dsadsa");
 		View rootView = inflater.inflate(R.layout.client_widok, container, false);
-		b1=(Button)rootView.findViewById(R.id.button1);	
-		b3=(Button)rootView.findViewById(R.id.button3);	
-			b1.setOnClickListener(new OnClickListener() {
-			
+		init(rootView);
+		return rootView;
+	}
+	private void init(View rootView)
+	{
+		b1 = (Button) rootView.findViewById(R.id.button1);
+		b3 = (Button) rootView.findViewById(R.id.button3);
+		listView = (ListView) rootView.findViewById(R.id.listView1);
+		progres= (ProgressBar)rootView.findViewById(R.id.progressBar1);
+		progres.setVisibility(0x000008);
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View view, int position, long id) 
+            {
+            	Toast.makeText(getActivity().getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    
+		b1.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				wykryjInne();
-				// TODO Auto-generated method stub
 				
+				wykryjInne(czy_wyswietlic);
+
 			}
 		});
-		 b3.setOnClickListener(new OnClickListener() {
-			
+		b3.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				pokazSparowane();
-							
+
 			}
 		});
-		return rootView;
+		
 	}
-	private final BroadcastReceiver odbiorca= new BroadcastReceiver() {		
+	private final BroadcastReceiver odbiorca = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent i) {
-			String akcja = 	i.getAction();
-			if(BluetoothDevice.ACTION_FOUND.equals(akcja)){		
-	              BluetoothDevice device = i.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	              String status="";	              
-	              if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-	            	  status="nie sparowane";
-	              }else{
-	            	  status="sparowane";
-	              }
-	            	  Log.d("INFO","znaleziono urządzenie: "+device.getName()+" - "+device.getAddress()+" - "+status);	         
-	      }			
+			String akcja = i.getAction();
+			if (BluetoothDevice.ACTION_FOUND.equals(akcja)) {
+				BluetoothDevice device = i.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				String status = "";
+				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+					status = "nie sparowane";
+					strArr.add(device.getAddress());
+				} else {
+					status = "sparowane";
+					strArr.add(device.getAddress());
+				}
+				Log.d("INFO",
+						"znaleziono urządzenie: " + device.getName() + " - " + device.getAddress() + " - " + status);
+			}
 		}
 	};
-	public void wykryjInne(){
+
+	public void wykryjInne(boolean czy_wyswietlic) {
+		if(czy_wyswietlic)
+		{
+		ArrayList<String> cache=strArr;
+		
+		adaArr = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1,cache);
+		adaArr.notifyDataSetChanged();
+		listView.setAdapter(adaArr);
+		this.czy_wyswietlic=false;
+		b1.setText("szukaj urzadzen");
+		progres.setVisibility(0x000008);
+		}
+		else
+		{
+		strArr.clear();
 		Log.d("INFO","Szukam innych urządzeń (ok 12s)");
 		IntentFilter filtr = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		getActivity().registerReceiver(odbiorca, filtr);
 		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
 		ba.startDiscovery();
+		this.czy_wyswietlic=true;
+		b1.setText("pokaz znalezione urzadzenia");
+		progres.setVisibility(1);
+		}
+		
 	}
-	public void pokazSparowane(){
+	public void pokazSparowane() {
 		/*
-		 * Wyświetlanie listy sparowanych urządzeń, niezależnie od tego czy są 
-		 * właśnie podłączone czy w ogóle włączone.
-		 * */
-		Log.d("INFO","Sparowane dla tego urządzenia");
+		 * Wyświetlanie listy sparowanych urządzeń, niezależnie od tego czy
+		 * są właśnie podłączone czy w ogóle włączone.
+		 */
+		Log.d("INFO", "Sparowane dla tego urządzenia");
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();		
-		if (pairedDevices.size() > 0) {	
-			for (BluetoothDevice device : pairedDevices) {				
-				Log.d("INFO",device.getName()+" - "+device.getAddress());			
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+		if (pairedDevices.size() > 0) {
+			for (BluetoothDevice device : pairedDevices) {
+				Log.d("INFO", device.getName() + " - " + device.getAddress());
+				strArr.add(device.getAddress());
 			}
 		}
-}
+	}
+
+	@Override
+	public void registerDataSetObserver(DataSetObserver observer) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void unregisterDataSetObserver(DataSetObserver observer) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean areAllItemsEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled(int position) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
