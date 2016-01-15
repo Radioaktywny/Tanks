@@ -23,4 +23,14 @@
         android:text="GRAJ" 
         android:onClick="startgame"/>
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="47dp"
+        android:text="Blutacz"
+        android:onClick="startBlutacz" />
+
 </RelativeLayout>

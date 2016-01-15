@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import bluetooth.Blutaczmenu;
 import game_engine.Game;
 
 public class MainActivity extends Activity {
@@ -28,6 +29,13 @@ public class MainActivity extends Activity {
 	public void startgame(View view)
 	{
         Intent activity= new Intent(MainActivity.this,Game.class);
+		//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
+		startActivity(activity); 
+		
+	}
+	public void startBlutacz(View view)
+	{
+		Intent activity= new Intent(MainActivity.this,Blutaczmenu.class);
 		//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
 		startActivity(activity); 
 		

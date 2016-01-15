@@ -26,8 +26,12 @@
             android:name="game_engine.Game"
             android:label="@string/title_activity_game" >
         </activity>
-
+        <activity
+            android:name="bluetooth.Blutaczmenu"
+            android:label="@string/title_activity_blutaczmenu" >
+        </activity>
         
     </application>
-
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 </manifest>
