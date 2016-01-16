@@ -23,6 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Player player;
     private JoystickView joystick;
 	Handler handgamepanel ;
+	private Explosion explosion;
     public GamePanel(Context context)
     {
         super(context);
@@ -64,6 +65,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
       thread.start();
       player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),30,40,30,100,100);
       player.setPlaying(true);
+      explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player.getX(),
+              player.getY()-30, 64, 64, 16);
       
 
   }
@@ -141,14 +144,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
     public void update()
     {
-    	
+    	 
     	if(player.getPlaying())
     	{
     		bg.update();
     		player.update();
+    		explosion.update();
     	}
     	
-
+    	
 
     }
    
@@ -172,6 +176,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			canvas.scale(scaleFactorX, scaleFactorY);    		
     		bg.draw(canvas);
     		player.draw(canvas);
+    		explosion.draw(canvas);
     		canvas.restoreToCount(savedState);
     	}
     	
