@@ -30,12 +30,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 	Handler handgamepanel ;
 	private Explosion explosion;
 	private ArrayList<Bullet> lista = new ArrayList();
+	private Player player2;
+	private int [] zakres= new int[2];
+	boolean dostelem=false;
     public GamePanel(Context context)
     {
         super(context);
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
-
         thread = new MainThread(getHolder(), this);
         joystick = (JoystickView) findViewById(R.id.joystickView);
         //make gamePanel focusable so it can handle events
@@ -70,51 +72,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
       thread.setRunning(true);
       thread.start();
       player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),30,40,30,100,100);
+      player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),100,400,30,100,100);
       player.setPlaying(true);
-      explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player.getX(),
-              player.getY()-30, 64, 64, 16);
+      
       
 
   }
   @Override
   public boolean onTouchEvent(MotionEvent event)
   {
-  	if(event.getAction()==MotionEvent.ACTION_DOWN)
-  	{
-  		System.out.println(event.getRawY()+"  "+event.getRawX());
-  		
-  		System.out.println(getHeight()+" " +getWidth());
-  		if(event.getRawY()>(getHeight()-200))
-  		{
-  			if(event.getRawX()<((getWidth()/4)))
-  			{
-  				player.setLeft(true);   			
-      			return true;        	
-  			}
-  			else if(event.getRawX()>(getWidth()-(getWidth()/4)))
-  			{
-  				player.setRight(true);   			
-      			return true;        	
-  			}
-  			else 
-  			{
-  				player.setDown(true);   			
-      			return true;   
-  			}
-  		}
-  		else if(event.getRawY()>(getHeight()-400))
-  		{
-  			player.setUp(true);
-  			return true;
-  		}    		
-  		   		
-  	}
-  	if(event.getAction()==MotionEvent.ACTION_UP)
-  	{
-  		player.setNo();	   	
-  		return super.onTouchEvent(event);
-  	}
-  	return false;
+	return false;
+
   }
     	
         public void steruj(String steruj)
@@ -155,10 +123,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     	{
     		bg.update();
     		player.update();
+    		player2.update();
     		try{
     		if(!lista.isEmpty())
-    		{	for(int i=0 ; i<lista.size() ; i++){
+    		{	for(int i=0 ; i<lista.size() ; i++)
+    			{
     			lista.get(i).update();
+    			
     			}
     		}
     		}catch(Exception e)
@@ -166,10 +137,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     			Log.d("Przycisk", e.getMessage());
     			bg.update();
         		player.update();
+        		player2.update();
     		}
+    		
 
-    		explosion.update();
+    		
     	}
+    	
+    	
+    	
+    	
     }
     	
     	
@@ -187,13 +164,39 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			canvas.scale(scaleFactorX, scaleFactorY);    		
     		bg.draw(canvas);
     		player.draw(canvas);
+    		if(player2.getHealth()>0)
+    		player2.draw(canvas);
     		if(!lista.isEmpty())
-    		{	for(int i=0 ; i<lista.size() ; i++){
+    		{	for(int i=0 ; i<lista.size() ; i++)
+    			{
     			lista.get(i).draw(canvas);
+    			Log.d("gra player2", String.valueOf(player2.getX()));
+    			Log.d("gra bomba", String.valueOf(lista.get(i).getX()));
+    			int zakresX= player2.getX() - lista.get(i).getX();
+    			int zakresY =player2.getY() - lista.get(i).getY();
+    			if(zakresX<0)
+    			{
+    				zakresX=zakresX*-1;
+    			}
+    			if(zakresY<0)
+    			{
+    				zakresY=zakresY*-1;	
+    			}
+    				
+    			if(zakresX > 10 && zakresX < 100  && zakresY > 5 && zakresY< 100)
+    			{	Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+String.valueOf(player2.getHealth()));
+    			
+    				explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player2.getX(),
+    			              player2.getY()-30, 64, 64, 16);
+    				explosion.update();
+    				explosion.draw(canvas);
+    				
+    				player2.setHealth(lista.get(i).getPower());
+    				lista.remove(i);
+    			}
     			}
     		}
-
-    		explosion.draw(canvas);
+    		//}
     		canvas.restoreToCount(savedState);
     	}
     	

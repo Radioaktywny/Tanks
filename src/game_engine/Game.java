@@ -93,7 +93,7 @@ public class Game extends Activity implements OnTouchListener{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();}
-	       mPlayer.start();
+	    //   mPlayer.start();
 	}
 	private void init_joistick(JoystickView joystick){
 		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
@@ -179,35 +179,7 @@ public class Game extends Activity implements OnTouchListener{
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		mPlayer.start();
+	//	mPlayer.start();
 		super.onResume();
 	}
 }
-
-//	@Override
-//	public boolean onTouch(View v, MotionEvent event) 
-//	{
-////		if(v.getId()==R.id.button2)
-////		{
-////			kierunek="up";
-////			return true;
-////		}
-////		else if(v.getId()==R.id.button3)
-////		{
-////			kierunek="left";
-////			return true;
-////		}
-////		else if(v.getId()==R.id.button4)
-////		{
-////			kierunek="down";
-////			return true;
-////		}
-////		else if(v.getId()==R.id.button5)
-////		{
-////			kierunek="right";
-////			return true;
-////		}
-////		kierunek="nic";
-////		return false;
-////	}
-//}

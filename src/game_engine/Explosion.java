@@ -39,7 +39,6 @@ public class Explosion {
         {
             canvas.drawBitmap(animation.getImage(),x,y,null);
         }
-
     }
     public void update()
     {

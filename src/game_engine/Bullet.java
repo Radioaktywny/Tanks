@@ -24,10 +24,13 @@ public class Bullet extends GameObject
 		x+=speed*direction_x;
 		y+=speed*direction_y;
 	}
-	
+
 	public void draw(Canvas canvas)
     {
         canvas.drawBitmap(spritesheet,x,y,null);
     }
-	
+	public int getPower()
+	{
+		return power;
+	}
 }

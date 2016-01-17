@@ -19,8 +19,10 @@ public class Player extends GameObject{
 
     public Player(Bitmap res, int width, int height, int numFrames,int armor,int health) {
     	speed=5;
-        x = 100;
-        y = 200 / 4;
+        x = 1000;
+        y = 250 ;
+        
+        
         this.health=health;
         this.armor = armor;
         this.height = height;
@@ -98,5 +100,9 @@ public class Player extends GameObject{
 		down = false;
     	left = false;
     	right = false;
+	}
+	public void setHealth(int x) {
+		// TODO Auto-generated method stub
+		health=health-x;
 	}
 }
