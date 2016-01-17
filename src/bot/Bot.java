@@ -1,10 +1,17 @@
-package game_engine;
+package bot;
+
+import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
+import android.view.animation.Animation;
+import game_engine.GameObject;
+import game_engine.Player;
 
 
-public class Player extends GameObject{
+public class Bot extends GameObject{
+	//nie wolno zmieniaæ speeda ! xd jak przestawisz to musisz w losuj Liczbe odpowiednio zmienic
     private Bitmap spritesheet;
     private int health;
     private int armor;
@@ -16,11 +23,14 @@ public class Player extends GameObject{
     private Animation animation;
     private long startTime;
 	private int speed;
-
-    public Player(Bitmap res, int width, int height, int numFrames,int armor,int health) {
+	private int podazamX;
+	private int podazamY;
+	public Bot(Bitmap res, int width, int height, int numFrames,int armor,int health) {
     	speed=10;
-        x = 1000;
-        y = 250 ;
+        x = losujLiczbe("x");
+        y = losujLiczbe("y");
+        podazamX=losujLiczbe("x");
+        podazamY=losujLiczbe("y");
         
         
         this.health=health;
@@ -41,49 +51,36 @@ public class Player extends GameObject{
 
     }
 
-    public void setUp(boolean b){
-    	up = b;
-    	    
-    }
-    public void setDown(boolean b){
-    	down = b;
-    	up = false;
-    	right = false;
-    	left = false;    
-    }
-    public void setLeft(boolean b){
-    	down = false;
-    	up = false;
-    	right = false;
-    	left = b;    
-    }
-    public void setRight(boolean b){
-    	down = false;
-    	up = false;
-    	right = b;
-    	left = false;    
-    }
-    public void update()
+  
+    public void update(Player player)
     {
         //long elapsed = (System.nanoTime()-startTime)/1000000;
         //animation.update();
-
-        if(up){
-            y = y-speed;
-        }
-        if(down)
-        {
-        	y=y+speed;
-        }
-        if(right)
-        {
-        	x=x+speed;
-        }
-        if(left)
-        {
-        	x=x-speed;
-        }
-
+    
+    //    if(player.getY()  < 600 && player.getY()  > 0){
+        	
+       // new Random().nextInt();
+    //	Log.d("BOT", "x"+String.valueOf(x) +"y"+String.valueOf(x)+"ide:"+String.valueOf(podazamX)+"y"+String.valueOf(podazamY));
+    	
+        	if(podazamX > x)
+        	{	
+        		
+        		x=x+speed;
+        	}
+        	else if(podazamX < x){
+        		x=x-speed;
+        	}
+        	if(podazamY > y)
+        	{
+        		 y = y+speed;
+        	}else if (podazamY < y){
+        		y=y-speed;
+        	}
+        	if(podazamX == x && podazamY == y )
+        	{
+        		podazamX=losujLiczbe("x");
+        		podazamY=losujLiczbe("");
+        	}
     }
 
     public void draw(Canvas canvas)
@@ -104,5 +101,13 @@ public class Player extends GameObject{
 	public void setHealth(int x) {
 		// TODO Auto-generated method stub
 		health=health-x;
+	}
+	
+	private int losujLiczbe(String x_y)
+	{
+			if(x_y.equals("x"))
+			return 50+(new Random().nextInt(200))*speed;
+			else
+			return 60+(new Random().nextInt(120))*speed;
 	}
 }

@@ -22,4 +22,20 @@
         android:layout_marginLeft="14dp"
         android:text="strzal" />
 
+    <TextView
+        android:id="@+id/player_HP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/strzal"
+        android:layout_alignParentTop="true"
+        android:text="player_HP" />
+
+    <TextView
+        android:id="@+id/przeciwnik_HP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="przeciwnik_HP" />
+
 </RelativeLayout>

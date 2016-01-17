@@ -7,11 +7,13 @@ import com.zerokol.views.JoystickView;
 import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,18 +52,22 @@ public class Game extends Activity implements OnTouchListener{
 	        //turn title off
 	        requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        //set to full screen
+	        
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
- 
+	        
 		game = new FrameLayout(this);  
-		gameView = new GamePanel(this); 
+		gameView = new GamePanel(this ); 
+
 		GameButtons =new RelativeLayout(this);
 		RelativeLayout GameButtons = new RelativeLayout(this);	
 		View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		GameButtons.addView(v);
 		game.addView(gameView);  
-		game.addView(GameButtons);  
+		game.addView(GameButtons); 
+	
 		setContentView(game);
+		setRequestedOrientation((ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)/2);
 		init_joistick((JoystickView) findViewById(R.id.joystickView));
 		music();
 		init_button_strzal((Button) findViewById(R.id.strzal));
@@ -190,5 +196,15 @@ public class Game extends Activity implements OnTouchListener{
 		// TODO Auto-generated method stub
 	//	mPlayer.start();
 		super.onResume();
+	}
+	public int getMetrics(String x_or_y)
+	{
+		DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        if(x_or_y.equals("x"))
+        return metrics.widthPixels;
+        if(x_or_y.equals("y"))
+        return metrics.heightPixels;
+        return 0;
 	}
 }
