@@ -164,7 +164,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			canvas.scale(scaleFactorX, scaleFactorY);    		
     		bg.draw(canvas);
     		player.draw(canvas);
-    		//if(player2.getHealth()>0)
+    		if(player2.getHealth()>0)
     		player2.draw(canvas);
     		if(!lista.isEmpty())
     		{	for(int i=0 ; i<lista.size() ; i++)
@@ -193,16 +193,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     	
     }
 
-    public void strzel(String ostatni_ruch_czolgu) {
+    public void strzel(String ostatni_ruch_czolgu,String rodzaj_pocisku) {
 		try{
+		int speed=1;
+		int power=1;
+		if(rodzaj_pocisku.equals("pocisk_1")){
+			speed=13;
+			power=10;	
+		}else if(rodzaj_pocisku.equals("nuke")){
+			 speed=10;
+			 power=50;	
+		}
+		
 		if(ostatni_ruch_czolgu.equals("prawa"))
-		lista.add(new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1), player.getX(), player.getY()+40 ,1,0));
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX(), player.getY()+40 ,1,0,power,speed));
 		else if(ostatni_ruch_czolgu.equals("lewa"))
-		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX(), player.getY()+40 ,-1,0));
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX(), player.getY()+40 ,-1,0,power,speed));
 		else if(ostatni_ruch_czolgu.equals("gora"))
-		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX()+40, player.getY() ,0,-1));
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu,rodzaj_pocisku), player.getX()+40, player.getY() ,0,-1,power,speed));
 		else if(ostatni_ruch_czolgu.equals("dol"))
-		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX()+40, player.getY() ,0,1));
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX()+40, player.getY() ,0,1,power,speed));
 		}catch(Exception e)
 		{
 			Log.d("przycisk", e.getMessage());
@@ -210,8 +220,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 		
 		 
 		}
-    private Bitmap odwrocony_obrazek_strzalu(String kierunek) {
+    private Bitmap odwrocony_obrazek_strzalu(String kierunek,String rodzaj_pocisku) {
 		int obroc=0;
+		Bitmap bitmapOrg=BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);;
 		if(kierunek.equals("lewa"))
 		{
 			obroc=180;
@@ -224,8 +235,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 		{
 			obroc=270;
 		}
-		// TODO Auto-generated method stub
-		Bitmap bitmapOrg =BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
+		if(rodzaj_pocisku.equals("pocisk_1")){
+		bitmapOrg =BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
+		}else if(rodzaj_pocisku.equals("nuke")){
+		bitmapOrg =BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_nuke);
+		}
 		 int width = bitmapOrg.getWidth();
 		    int height = bitmapOrg.getHeight();
 		    int newWidth = bitmapOrg.getWidth();
@@ -244,6 +258,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 		                      width, height, matrix, true);
 		return resizedBitmap;
 	}
+
+
     
 
 }

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
@@ -69,10 +70,18 @@ public class Game extends Activity implements OnTouchListener{
 		strzal.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				gameView.strzel(Ostatni_ruch_czolgu);				
+				gameView.strzel(Ostatni_ruch_czolgu,"pocisk_1");				
 			}
 		});
-		
+		strzal.setOnLongClickListener(new OnLongClickListener() {
+			
+			
+			@Override
+			public boolean onLongClick(View v) {
+				gameView.strzel(Ostatni_ruch_czolgu,"nuke");
+				return true;
+			}
+		});
 	}
 	private void music() 
 	{
