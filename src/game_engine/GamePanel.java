@@ -164,7 +164,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			canvas.scale(scaleFactorX, scaleFactorY);    		
     		bg.draw(canvas);
     		player.draw(canvas);
-    		if(player2.getHealth()>0)
+    		//if(player2.getHealth()>0)
     		player2.draw(canvas);
     		if(!lista.isEmpty())
     		{	for(int i=0 ; i<lista.size() ; i++)
@@ -173,17 +173,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     			Log.d("gra player2", String.valueOf(player2.getX()));
     			Log.d("gra bomba", String.valueOf(lista.get(i).getX()));
     			int zakresX= player2.getX() - lista.get(i).getX();
-    			int zakresY =player2.getY() - lista.get(i).getY();
-    			if(zakresX<0)
-    			{
-    				zakresX=zakresX*-1;
-    			}
-    			if(zakresY<0)
-    			{
-    				zakresY=zakresY*-1;	
-    			}
-    				
-    			if(zakresX > 10 && zakresX < 100  && zakresY > 5 && zakresY< 100)
+    			int zakresY =player2.getY() - lista.get(i).getY();	
+    			if(zakresX >= -115 && zakresX <= 20  && zakresY >= -95 && zakresY<= 20)
     			{	Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+String.valueOf(player2.getHealth()));
     			
     				explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player2.getX(),
