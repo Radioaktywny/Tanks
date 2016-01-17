@@ -1,15 +1,20 @@
 package game_engine;
 
 
+import java.util.ArrayList;
+
 import com.example.tanks.R;
 import com.zerokol.views.JoystickView;
 import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import activities_menu.MainActivity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,6 +29,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private JoystickView joystick;
 	Handler handgamepanel ;
 	private Explosion explosion;
+	private ArrayList<Bullet> lista = new ArrayList();
     public GamePanel(Context context)
     {
         super(context);
@@ -149,22 +155,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     	{
     		bg.update();
     		player.update();
+    		try{
+    		if(!lista.isEmpty())
+    		{	for(int i=0 ; i<lista.size() ; i++){
+    			lista.get(i).update();
+    			}
+    		}
+    		}catch(Exception e)
+    		{
+    			Log.d("Przycisk", e.getMessage());
+    			bg.update();
+        		player.update();
+    		}
+
     		explosion.update();
     	}
+    }
     	
     	
 
-    }
+    
    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     @Override
     public void draw(Canvas canvas)
     {
@@ -176,9 +187,69 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			canvas.scale(scaleFactorX, scaleFactorY);    		
     		bg.draw(canvas);
     		player.draw(canvas);
+    		if(!lista.isEmpty())
+    		{	for(int i=0 ; i<lista.size() ; i++){
+    			lista.get(i).draw(canvas);
+    			}
+    		}
+
     		explosion.draw(canvas);
     		canvas.restoreToCount(savedState);
     	}
     	
     }
+
+    public void strzel(String ostatni_ruch_czolgu) {
+		try{
+		if(ostatni_ruch_czolgu.equals("prawa"))
+		lista.add(new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1), player.getX(), player.getY()+40 ,1,0));
+		else if(ostatni_ruch_czolgu.equals("lewa"))
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX(), player.getY()+40 ,-1,0));
+		else if(ostatni_ruch_czolgu.equals("gora"))
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX()+40, player.getY() ,0,-1));
+		else if(ostatni_ruch_czolgu.equals("dol"))
+		lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu), player.getX()+40, player.getY() ,0,1));
+		}catch(Exception e)
+		{
+			Log.d("przycisk", e.getMessage());
+		}
+		
+		 
+		}
+    private Bitmap odwrocony_obrazek_strzalu(String kierunek) {
+		int obroc=0;
+		if(kierunek.equals("lewa"))
+		{
+			obroc=180;
+		}
+		else if(kierunek.equals("dol"))
+		{
+			obroc=90;
+		}
+		else if(kierunek.equals("gora"))
+		{
+			obroc=270;
+		}
+		// TODO Auto-generated method stub
+		Bitmap bitmapOrg =BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
+		 int width = bitmapOrg.getWidth();
+		    int height = bitmapOrg.getHeight();
+		    int newWidth = bitmapOrg.getWidth();
+		    int newHeight = bitmapOrg.getHeight();;
+		    // calculate the scale - in this case = 0.4f
+		    float scaleWidth = ((float) newWidth) / width;
+		    float scaleHeight = ((float) newHeight) / height;	    
+		    // createa matrix for the manipulation
+		    Matrix matrix = new Matrix();
+		    // resize the bit map
+		    matrix.postScale(scaleWidth, scaleHeight);
+		    // rotate the Bitmap
+		    matrix.postRotate(obroc);
+		    // recreate the new Bitmap
+		    Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0,
+		                      width, height, matrix, true);
+		return resizedBitmap;
+	}
+    
+
 }

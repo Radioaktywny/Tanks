@@ -63,20 +63,17 @@ public class Game extends Activity implements OnTouchListener{
 		setContentView(game);
 		init_joistick((JoystickView) findViewById(R.id.joystickView));
 		music();
-	//	init_button_strzal((Button) findViewById(R.id.strzal));
+		init_button_strzal((Button) findViewById(R.id.strzal));
 }
-//	private void init_button_strzal(Button strzal) {
-//		strzal.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				gameView.strzel(Ostatni_ruch_czolgu);				
-//				Toast toast = Toast.makeText(getApplicationContext(), "dziala", Toast.LENGTH_SHORT);
-//				toast.show();
-//				
-//			}
-//		});
-//		
-//	}
+	private void init_button_strzal(Button strzal) {
+		strzal.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				gameView.strzel(Ostatni_ruch_czolgu);				
+			}
+		});
+		
+	}
 	private void music() 
 	{
 		// TODO Auto-generated method stub
