@@ -54,13 +54,13 @@ public class Game extends Activity implements OnTouchListener{
 	        //set to full screen
 	        
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	        
+	        View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);   
 		game = new FrameLayout(this);  
-		gameView = new GamePanel(this ); 
+		gameView = new GamePanel(this ,v); 
 
 		GameButtons =new RelativeLayout(this);
 		RelativeLayout GameButtons = new RelativeLayout(this);	
-		View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);
+		
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		GameButtons.addView(v);
 		game.addView(gameView);  

@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,7 +33,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
 	//public TextView txtplayerHP;
 	//public TextView txtprzeciwnikHP;
-    private MainThread thread;
+	private View v;
+	private TextView txtplayerHP;
+ 	private TextView  txtprzeciwnikHP;
+	private MainThread thread;
     private Background bg;
     private Player player;
     private JoystickView joystick;
@@ -42,16 +46,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Bot player2;
 	private int [] zakres= new int[2];
 	boolean dostelem=false;
-    public GamePanel(Context context)
-    {
+    public GamePanel(Context context, View v2)
+    {	
         super(context);
+        v=v2;
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
         joystick = (JoystickView) findViewById(R.id.joystickView);
         //make gamePanel focusable so it can handle events
         setFocusable(true);
- 
     }
 
   @Override
@@ -82,10 +86,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
       player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),30,40,30,100,100);
       player2 = new Bot(BitmapFactory.decodeResource(getResources(), R.drawable.tank),100,400,30,100,100);
       player.setPlaying(true);
-//      txtplayerHP= (TextView) findViewById(R.id.player_HP);
-//  	  txtprzeciwnikHP= (TextView) findViewById(R.id.przeciwnik_HP);
-//      txtprzeciwnikHP.setText("BOT_HP:"+String.valueOf(player2.getHealth()));
-//      txtplayerHP.setText("HP:"+String.valueOf(player.getHealth()));
+      txtplayerHP= (TextView) v.findViewById(R.id.player_HP);
+  	  txtprzeciwnikHP= (TextView) v.findViewById(R.id.przeciwnik_HP);
+      txtprzeciwnikHP.setText("BOT_HP:100");
+      txtplayerHP.setText("HP:100");
   }
   @Override
   public boolean onTouchEvent(MotionEvent event)
@@ -247,7 +251,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     			explosion.update();
     			explosion.draw(canvas);
     			player2.setHealth(lista.get(i).getPower());
-    			//txtprzeciwnikHP.setText("BOT_HP:"+String.valueOf(player2.getHealth()));
+    			txtprzeciwnikHP.setText("BOT_HP:"+String.valueOf(player2.getHealth()));
     			lista.remove(i);	
     		}
     	}else 
@@ -262,7 +266,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     			explosion.update();
     			explosion.draw(canvas);
     			player.setHealth(lista.get(i).getPower());
-    			//txtplayerHP.setText("HP:"+String.valueOf(player.getHealth()));
+    			txtplayerHP.setText("HP:"+String.valueOf(player.getHealth()));
     			lista.remove(i);
     		}
     	}		
