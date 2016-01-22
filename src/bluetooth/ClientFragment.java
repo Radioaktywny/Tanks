@@ -150,7 +150,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 		{
 		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
 		BluetoothDevice serwer = ba.getRemoteDevice(MAC);      
-		new ClientBluetooth(serwer).start();
+		new Thread(new ClientBluetooth(serwer)).start();
 		}
 		else
 		{

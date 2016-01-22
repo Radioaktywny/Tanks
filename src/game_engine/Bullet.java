@@ -35,4 +35,10 @@ public class Bullet extends GameObject
 	{
 		return power;
 	}
+
+	public int[] getDirection() 
+	{
+		// TODO Auto-generated method stub
+		return new int[]{direction_x,direction_y};
+	}
 }

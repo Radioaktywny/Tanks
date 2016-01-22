@@ -11,8 +11,10 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-public class SerwerBluetooth extends Thread {
+public class SerwerBluetooth implements Runnable {
     private final BluetoothServerSocket mmServerSocket;
+	private String odebrane;
+	private String wyslij;
  
     public SerwerBluetooth() {
     	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();     
@@ -23,21 +25,41 @@ public class SerwerBluetooth extends Thread {
         } catch (IOException e) { }
         mmServerSocket = tmp;
     }
- 
+    public synchronized String getOdebrane()
+    {
+    	return odebrane;
+    }
+    public synchronized void wyslij(String dane)
+    {
+    	wyslij=dane;
+    }
     public void run() {
     	Log.d("INFO","Uruchamiam serwer");
         BluetoothSocket socket = null;       
-        while (true) {
+        
             try {
             	Log.d("INFO","Czekam na połączenie od clienta");
                 socket = mmServerSocket.accept();
                 Log.d("INFO","Mam clienta!");
                 /*Utworzenie strumieni wejściowego i wyjściowego*/  
                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                int i=0;
+                while(true)
+                {
+                	i++;
+                	out.println(wyslij);
+                	String s=in.readLine();
+                	odebrane=s;           	
+                	if(false)
+                		break;
+                	Log.d("INFO "+i,odebrane);
+                	wyslij(i+"Serwer Klient Maciek jest fajny blutacz super dziala kurde nie wiem jak ale to dziala omg omg xdd");
+                }        
                 out.println("Witaj kolego!");
                // BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
             } catch (IOException e) {
-                break;
+                
             }
             if (socket != null) {
                /*
@@ -48,9 +70,9 @@ public class SerwerBluetooth extends Thread {
 				} catch (Exception e) {					
 					e.printStackTrace();
 				}
-                break;
+                
             }
         }
     }
  
-}
+
