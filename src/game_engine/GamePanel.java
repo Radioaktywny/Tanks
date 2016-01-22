@@ -34,6 +34,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 	//public TextView txtplayerHP;
 	//public TextView txtprzeciwnikHP;
 	private View v;
+	private String ruch_czolgu;
 	private TextView txtplayerHP;
  	private TextView  txtprzeciwnikHP;
 	private MainThread thread;
@@ -99,7 +100,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
   }
     	
         public void steruj(String steruj)
-        {	
+        {	ruch_czolgu=steruj;
         
         	if(steruj.equals("lewa"))
         	{
@@ -136,23 +137,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     	{	
     		bot_strzelaj();//musialem mu tu wrzucic :(
     		int licz=1;
-    		bg.update();
+    		bg.update();player2.update(player);
     		//Log.d("METRYCKA",""); tu na dole dostosowalem do swojego ekrany narazie nie zrpobilem auto pobierania rozmiaru
     		if(player.getY() > 40 && player.getY() < 1280 && player.getX() > 40 && player.getX() < 2250)
     		{
     			player.update();
-    			player2.update(player);
+    		//player2.update(player);
     		}
     		else
     		{
-    		if(player.getY() <= 40)
-    				player.y=player.y+licz;
-    		if(player.getY() >= 1280)
-    				player.y=player.y-licz;
-    		if(player.getX() <= 40)
-    				player.x=player.x+licz;
-        	if(player.getX() >= 2250)
-        			player.x=player.x-licz;
+    		if(player.getY() <= 40 &&(!ruch_czolgu.equals("gora")))
+    			player.update();
+    		if(player.getY() >= 1280 &&(!ruch_czolgu.equals("dol")))
+    			player.update();
+    		if(player.getX() <= 40 &&(!ruch_czolgu.equals("lewa")))
+    			player.update();
+        	if(player.getX() >= 2250 &&(!ruch_czolgu.equals("prawa")))
+        		player.update();
     		}
     		//Log.d("PLAYER", "X"+String.valueOf(player.getX()) + "Y"+String.valueOf(player.getY()));
     		//x10
@@ -271,7 +272,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 	}
 
 	public void strzel(String ostatni_ruch_czolgu,String rodzaj_pocisku) 
-	{
+	{	
 		try
 		{
 		int speed=1;

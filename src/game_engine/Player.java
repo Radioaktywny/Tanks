@@ -85,6 +85,18 @@ public class Player extends GameObject{
         }
 
     }
+    public String getKierunek()
+    {
+    	if(up)
+    	return "gora";
+    	else if(down)
+        	return "dol";
+    	else if(left)
+        	return "lewa";
+    	else if(right)
+        	return "prawa";
+		return null;
+    }
 
     public void draw(Canvas canvas)
     {
