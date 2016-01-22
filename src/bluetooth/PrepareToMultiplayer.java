@@ -44,7 +44,7 @@ public class PrepareToMultiplayer
 		lasti=i+1;
 		}
 		if(licznik==2)
-			if(iGotThis.subSequence(i+1, i+2).equals("?"))
+			if(iGotThis.substring(i+1, i+2).equals("?"))
 			break;
 			else
 			{
@@ -83,5 +83,9 @@ public class PrepareToMultiplayer
 		{
 			return null;
 		}
+	}
+	public String sendToThread()
+	{		
+		return iWillsendIt;
 	}
 }

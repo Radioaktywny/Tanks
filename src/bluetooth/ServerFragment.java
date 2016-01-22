@@ -28,7 +28,7 @@ public class ServerFragment extends Fragment implements OnClickListener{
 			@Override
 			public void onClick(View v) {
 				dajSieWykryc();		
-				new Thread(new SerwerBluetooth()).start();
+				
 				// TODO Auto-generated method stub
 				
 			}

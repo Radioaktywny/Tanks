@@ -15,7 +15,6 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="activities_menu.MainActivity"
-
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,23 +26,25 @@
             android:name="game_engine.Game"
             android:label="@string/title_activity_game" >
         </activity>
-        <activity
-            android:name="bluetooth.Blutaczmenu"
-             >
+        <activity android:name="bluetooth.Blutaczmenu" >
         </activity>
         <activity
             android:name="bluetooth.Blutacz_main"
-            android:label="@string/title_activity_blutaczmenu">
-            
+            android:label="@string/title_activity_blutaczmenu" >
         </activity>
         <activity
             android:name=".SerwerMenu"
             android:label="@string/title_activity_serwer_menu" >
         </activity>
-        
+
         <service android:name="activities_menu.MusicService" />
+
+        <activity
+            android:name="game_engine_multiplayer.Game_multiplayer"
+            android:label="@string/title_activity_game_multiplayer" >
+        </activity>
     </application>
-	
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 

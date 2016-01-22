@@ -149,7 +149,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 		if(sparowane.contains(MAC))
 		{
 		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
-		BluetoothDevice serwer = ba.getRemoteDevice(MAC);      
+		BluetoothDevice serwer = ba.getRemoteDevice(MAC);   		
 		new Thread(new ClientBluetooth(serwer)).start();
 		}
 		else

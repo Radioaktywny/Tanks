@@ -44,17 +44,15 @@ public class SerwerBluetooth implements Runnable {
                 /*Utworzenie strumieni wejściowego i wyjściowego*/  
                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                int i=0;
                 while(true)
                 {
-                	i++;
                 	out.println(wyslij);
                 	String s=in.readLine();
                 	odebrane=s;           	
                 	if(false)
                 		break;
-                	Log.d("INFO "+i,odebrane);
-                	wyslij(i+"Serwer Klient Maciek jest fajny blutacz super dziala kurde nie wiem jak ale to dziala omg omg xdd");
+                	Log.d("INFO ",odebrane);
+                	
                 }        
                 out.println("Witaj kolego!");
                // BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
