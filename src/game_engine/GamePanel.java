@@ -246,12 +246,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     		int zakresY =zmienny.getY() - lista.get(i).getY();	
     		if(zakresX >= -115 && zakresX <= 20  && zakresY >= -95 && zakresY<= 20)
     		{	
-    			Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+"BOT:"+String.valueOf(zmienny.getHealth()));
+    			Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+"BOT:"+String.valueOf(zmienny.getHealth()-lista.get(i).getPower()));
     			explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player2.getX(),player2.getY()-30, 64, 64, 16);
     			explosion.update();
     			explosion.draw(canvas);
     			player2.setHealth(lista.get(i).getPower());
-    			txtprzeciwnikHP.setText("BOT_HP:"+String.valueOf(player2.getHealth()));
     			lista.remove(i);	
     		}
     	}else 
@@ -260,13 +259,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     		int zakresX = zmienny.getX() - lista.get(i).getX();
     		int zakresY =zmienny.getY() - lista.get(i).getY();	
     		if(zakresX >= -115 && zakresX <= 20  && zakresY >= -95 && zakresY<= 20)
-    		{	Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+"PLEYER:"+String.valueOf(player.getHealth()));
+    		{	Log.d("dostal", "X "+String.valueOf(zakresX)+"Y "+String.valueOf(zakresY)+"zycie"+"PLEYER:"+String.valueOf(player.getHealth()-lista.get(i).getPower()));
     		
     			explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player.getX(), player.getY()-30, 64, 64, 16);
     			explosion.update();
     			explosion.draw(canvas);
     			player.setHealth(lista.get(i).getPower());
-    			txtplayerHP.setText("HP:"+String.valueOf(player.getHealth()));
     			lista.remove(i);
     		}
     	}		
@@ -337,6 +335,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 		    // recreate the new Bitmap
 		    Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height, matrix, true);
 		return resizedBitmap;
+	}
+
+	public void gui() {
+		/** MEtoda dziala w watku do wyswietlania hp ale nie wiem jakim cudem wie kiedy trafiles zanim trafisz XD **/
+		txtprzeciwnikHP.setText("BOT_HP:"+String.valueOf(player2.getHealth()));
+		txtplayerHP.setText("HP:"+String.valueOf(player.getHealth()));
+		
+		// TODO Auto-generated method stub
+		
 	}
 
 
