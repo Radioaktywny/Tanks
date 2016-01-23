@@ -7,13 +7,14 @@ import java.util.UUID;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class ClientBluetooth implements Runnable {
+public class ClientBluetooth extends AsyncTask<Void, String, Void> {
     private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
-    private String odebrane="brak";
-    private String danedowyslania="brak";
+    private volatile String odebrane="brak";
+    private volatile String danedowyslania="brak";
     public ClientBluetooth(BluetoothDevice device) {       
         BluetoothSocket tmp = null;
         mmDevice = device;
@@ -31,8 +32,10 @@ public class ClientBluetooth implements Runnable {
     {
     	danedowyslania=dane;
     }
-    public void run() {
-         try {     
+   
+	@Override
+	protected Void doInBackground(Void... params) {
+		try {     
         	Log.d("INFO","Próba po³¹czenia");
             mmSocket.connect();
             Log.d("INFO","Po³¹czono z socketem");
@@ -44,7 +47,8 @@ public class ClientBluetooth implements Runnable {
             	i++;
             	String s=in.readLine();
             	out.println(danedowyslania);
-            	odebrane=s;           	
+            	onProgressUpdate(s);  
+            	
             	if(false)
             		break;
             	Log.d("INFO KLIENT",odebrane);
@@ -57,5 +61,12 @@ public class ClientBluetooth implements Runnable {
             } catch (Exception cle) { }            
         }
  
-    } 
+		// TODO Auto-generated method stub
+		return null;
+	} 
+	@Override
+	protected void onProgressUpdate(String... values) {
+		// TODO Auto-generated method stub
+		odebrane=values[0];
+	}
 }

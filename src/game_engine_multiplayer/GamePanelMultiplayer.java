@@ -62,7 +62,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
 		this.serwer=serwer;
-		new Thread(this.serwer).start();
+		this.serwer.execute();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
@@ -75,7 +75,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
 		this.client=client;
-		new Thread(this.client).start();
+		this.client.execute();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
@@ -163,7 +163,10 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	public void secondplayer()
 	{
 		if(serwer!=null)
+		{
 		multiStrings.sendTogame(serwer.getOdebrane());
+		Log.d("sendtogame", "true");
+		}
 		if(client!=null)
 			multiStrings.sendTogame(client.getOdebrane());
 		int i[]=multiStrings.getDirectionFromBT();
@@ -216,7 +219,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	public void checkMove(Player player) {
 		if (player.getY() > 40 && player.getY() < 1280 && player.getX() > 40 && player.getX() < 2250) {
 			player.update();
-			player2.update();
 		} else {
 			if (player.getY() <= 40 && (!ruch_czolgu.equals("gora")))
 				player.update();

@@ -9,12 +9,13 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class SerwerBluetooth implements Runnable {
+public class SerwerBluetooth extends AsyncTask<Void, String, Void>  {
     private final BluetoothServerSocket mmServerSocket;
-	private String odebrane="brak";
-	private String danedowyslania="brak";
+	private volatile String odebrane="brak";
+	private volatile String danedowyslania="brak";
  
     public SerwerBluetooth() {
     	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();     
@@ -25,15 +26,20 @@ public class SerwerBluetooth implements Runnable {
         } catch (IOException e) { e.printStackTrace();}
         mmServerSocket = tmp;
     }
-    public synchronized String getOdebrane()
+    public String getOdebrane()
     {
+    	Log.d("odebrane", odebrane);
     	return odebrane;
+    	
     }
-    public synchronized void wyslij(String dane)
+    public void wyslij(String dane)
     {
     	danedowyslania=dane;
-    }
-    public void run() {
+    }  
+	@Override
+	protected Void doInBackground(Void... params) 
+	{
+
     	Log.d("INFO","Uruchamiam serwer");
         BluetoothSocket socket = null;       
         
@@ -41,21 +47,23 @@ public class SerwerBluetooth implements Runnable {
             	Log.d("INFO","Czekam na połączenie od clienta");
                 socket = mmServerSocket.accept();
                 Log.d("INFO","Mam clienta!");
-                /*Utworzenie strumieni wejściowego i wyjściowego*/  
+                
                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 while(true)
                 {
+                	
                 	out.println(danedowyslania);
                 	String s=in.readLine();
-                	odebrane=s;           	
+                	onProgressUpdate(s);
+                	               	
                 	if(false)
                 		break;
                 	Log.d("INFO SERWER ",odebrane);
                 	
                 }        
                 
-               // BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
+               
             } catch (IOException e) {
                 
             }
@@ -70,7 +78,15 @@ public class SerwerBluetooth implements Runnable {
 				}
                 
             }
-        }
+		return null;
+	}
+	@Override
+    protected void onProgressUpdate(String... s) {		
+		odebrane=s[0]; 	
+		Log.d("odebrane", odebrane);
+		
+	}
+
     }
  
 

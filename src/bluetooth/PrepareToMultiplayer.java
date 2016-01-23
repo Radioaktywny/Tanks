@@ -5,8 +5,8 @@ import game_engine.Bullet;
 
 public class PrepareToMultiplayer 
 {
-	private String iWillsendIt;
-	private String iGotThis="brak";
+	private volatile String iWillsendIt;
+	private volatile String iGotThis="brak";
 	private int[] xy=new int[]{1,1};
 	private boolean newBullet=false;
 	private int bulletPower=0;
@@ -71,7 +71,7 @@ public class PrepareToMultiplayer
 			}
 		}
 		}		
-		Log.d("wartosci",String.valueOf(xy[0])+String.valueOf(xy[1]));
+		Log.d("wartosci",String.valueOf(xy[0])+String.valueOf(xy[1])+"  "+iGotThis);
 		return xy;	
 	}
 	public synchronized void  sendTogame(String stringfromBT)
