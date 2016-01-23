@@ -1,15 +1,16 @@
 package bluetooth;
 
+import android.util.Log;
 import game_engine.Bullet;
 
 public class PrepareToMultiplayer 
 {
 	private String iWillsendIt;
-	private String iGotThis;
-	private int[] xy;
+	private String iGotThis="brak";
+	private int[] xy=new int[]{1,1};
 	private boolean newBullet=false;
 	private int bulletPower=0;
-	private int bulletDirection[]= new int[2];
+	private int bulletDirection[]= new int[]{1,1};
 	public PrepareToMultiplayer() {
 		// TODO Auto-generated constructor stub
 	}
@@ -19,11 +20,11 @@ public class PrepareToMultiplayer
 		int dir[]= bullet.getDirection();
 		iWillsendIt=iWillsendIt+";"+bullet.getPower()+";"+dir[0]+";"+dir[1]+";?";
 	}
-	public void createStringToSend()
+	public synchronized void  createStringToSend()
 	{
 		iWillsendIt=String.valueOf(xy[0])+";"+String.valueOf(xy[1])+";?";
 	}
-	public void setDirectionToSend(int []xy)
+	public synchronized void setDirectionToSend(int []xy)
 	{
 		this.xy=xy;
 	}
@@ -34,6 +35,7 @@ public class PrepareToMultiplayer
 	private int [] getDirectionFromString()
 	{
 		int xy[]=new int[2];
+		xy[0]=1;xy[1]=1;
 		int licznik=0;
 		int lasti=0;
 		for(int i=0;i<iGotThis.length();++i)
@@ -42,8 +44,10 @@ public class PrepareToMultiplayer
 		{
 		xy[licznik]=Integer.valueOf(iGotThis.substring(lasti,i));
 		lasti=i+1;
+		++licznik;
 		}
 		if(licznik==2)
+		{
 			if(iGotThis.substring(i+1, i+2).equals("?"))
 			break;
 			else
@@ -65,10 +69,12 @@ public class PrepareToMultiplayer
 					
 					}
 			}
+		}
 		}		
+		Log.d("wartosci",String.valueOf(xy[0])+String.valueOf(xy[1]));
 		return xy;	
 	}
-	public void sendTogame(String stringfromBT)
+	public synchronized void  sendTogame(String stringfromBT)
 	{
 		this.iGotThis=stringfromBT;		
 	}
@@ -84,8 +90,9 @@ public class PrepareToMultiplayer
 			return null;
 		}
 	}
-	public String sendToThread()
+	public synchronized String sendToThread()
 	{		
+		createStringToSend();
 		return iWillsendIt;
 	}
 }

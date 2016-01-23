@@ -40,9 +40,10 @@ public class MainThreadMultiplayer extends Thread
                 	this.GamePanelMultiplayer.secondplayer();
                     this.GamePanelMultiplayer.update();
                     this.GamePanelMultiplayer.draw(canvas);
-                    this.GamePanelMultiplayer.gui();
+                    //this.GamePanelMultiplayer.gui();
                 }
             } catch (Exception e) {
+            	e.printStackTrace();
             }
             finally{
                 if(canvas!=null)

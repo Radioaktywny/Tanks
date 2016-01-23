@@ -13,8 +13,8 @@ import android.util.Log;
 
 public class SerwerBluetooth implements Runnable {
     private final BluetoothServerSocket mmServerSocket;
-	private String odebrane;
-	private String wyslij;
+	private String odebrane="brak";
+	private String danedowyslania="brak";
  
     public SerwerBluetooth() {
     	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();     
@@ -22,7 +22,7 @@ public class SerwerBluetooth implements Runnable {
         try {
         	UUID uuid=UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
             tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("Usługa witająca", uuid);
-        } catch (IOException e) { }
+        } catch (IOException e) { e.printStackTrace();}
         mmServerSocket = tmp;
     }
     public synchronized String getOdebrane()
@@ -31,7 +31,7 @@ public class SerwerBluetooth implements Runnable {
     }
     public synchronized void wyslij(String dane)
     {
-    	wyslij=dane;
+    	danedowyslania=dane;
     }
     public void run() {
     	Log.d("INFO","Uruchamiam serwer");
@@ -46,15 +46,15 @@ public class SerwerBluetooth implements Runnable {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 while(true)
                 {
-                	out.println(wyslij);
+                	out.println(danedowyslania);
                 	String s=in.readLine();
                 	odebrane=s;           	
                 	if(false)
                 		break;
-                	Log.d("INFO ",odebrane);
+                	Log.d("INFO SERWER ",odebrane);
                 	
                 }        
-                out.println("Witaj kolego!");
+                
                // BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
             } catch (IOException e) {
                 

@@ -7,6 +7,7 @@ import com.zerokol.views.JoystickView;
 import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
@@ -45,20 +46,26 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 	private ClientBluetooth client=null;
 	Handler handgame ;
 	private MediaPlayer mPlayer;
+	private String MAC;
 	
-	public Game_multiplayer() {		
-		new Thread(server=new SerwerBluetooth()).start();		
-	}
-	public Game_multiplayer(BluetoothDevice serwer)	{
-		new Thread(client=new ClientBluetooth(serwer)).start();
-	}
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //set to full screen	        
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	        
+        MAC = getIntent().getExtras().getString("MAC");
+        if(!MAC.equals("brak"))
+        {
+        BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
+		BluetoothDevice serwer = ba.getRemoteDevice(MAC);  		
+			client=new ClientBluetooth(serwer);
+        }
+        else
+        {
+        	server=new SerwerBluetooth();
+        }
         init();
 		init_joistick((JoystickView) findViewById(R.id.joystickView));
 		music();
@@ -70,7 +77,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 		game = new FrameLayout(this);  
 		if(client!=null)
 		gameView = new GamePanelMultiplayer(this ,v,client); 
-		else
+		if(server!=null)
 		gameView = new GamePanelMultiplayer(this ,v,server); 
 		
 		GameButtons =new RelativeLayout(this);

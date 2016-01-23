@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import game_engine_multiplayer.Game_multiplayer;
 
 public class ServerFragment extends Fragment implements OnClickListener{
 	private Button b2;
@@ -22,12 +23,17 @@ public class ServerFragment extends Fragment implements OnClickListener{
 		View rootView = inflater.inflate(R.layout.server_widok, container, false);
 		 //t2= (TextView)rootView.findViewById(R.id.textView2);
 		 b2= (Button)rootView.findViewById(R.id.button2);
-		 
+		 dajSieWykryc();	
 		 b2.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				dajSieWykryc();		
+					
+				Game_multiplayer gm= new Game_multiplayer();
+				Intent activity= new Intent(getActivity(),gm.getClass());
+				activity.putExtra("MAC", "brak");
+				//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
+				startActivity(activity); 
 				
 				// TODO Auto-generated method stub
 				

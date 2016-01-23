@@ -19,8 +19,8 @@ public class Player extends GameObject{
 
     public Player(Bitmap res, int width, int height, int numFrames,int armor,int health) {
     	speed=10;
-        x = 1000;
-        y = 250 ;
+        x = 200;
+        y = 200 ;
         
         
         this.health=health;

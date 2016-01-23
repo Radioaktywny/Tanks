@@ -61,10 +61,12 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		// add the callback to the surfaceholder to intercept events
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
+		this.serwer=serwer;
+		new Thread(this.serwer).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
-		this.serwer=serwer;
+		
 	}
 	public GamePanelMultiplayer(Context context, View v2,ClientBluetooth client) {
 		super(context);
@@ -72,10 +74,12 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		// add the callback to the surfaceholder to intercept events
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
+		this.client=client;
+		new Thread(this.client).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
-		this.client=client;
+		
 	}
 
 	@Override
@@ -106,8 +110,9 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		thread.setRunning(true);
 		thread.start();
 		player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank), 30, 40, 30, 100, 100);
-		player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank), 100, 400, 30, 100, 100);
+		player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank), 60, 40, 30, 100, 100);
 		player.setPlaying(true);
+		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
 		txtprzeciwnikHP = (TextView) v.findViewById(R.id.przeciwnik_HP);
 		txtprzeciwnikHP.setText("BOT_HP:100");
@@ -145,14 +150,22 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		}
 		
 		if(serwer!=null)
-			serwer.wyslij(multiStrings.sendToThread());
-		else
-			client.wyslij(multiStrings.sendToThread());
-
+			{	
+				this.serwer.wyslij(multiStrings.sendToThread());
+			}
+		if(client!=null)
+			{
+			this.client.wyslij(multiStrings.sendToThread());
+			}
+		Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
+		Log.d("player",String.valueOf(player2.getX())+" "+String.valueOf(player2.getY()));
 	}
 	public void secondplayer()
 	{
-		multiStrings.sendTogame(client.getOdebrane());
+		if(serwer!=null)
+		multiStrings.sendTogame(serwer.getOdebrane());
+		if(client!=null)
+			multiStrings.sendTogame(client.getOdebrane());
 		int i[]=multiStrings.getDirectionFromBT();
 		if (i[0]==0) {
 			player2.setLeft(true);
@@ -203,7 +216,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	public void checkMove(Player player) {
 		if (player.getY() > 40 && player.getY() < 1280 && player.getX() > 40 && player.getX() < 2250) {
 			player.update();
-			// player2.update(player);
+			player2.update();
 		} else {
 			if (player.getY() <= 40 && (!ruch_czolgu.equals("gora")))
 				player.update();
@@ -344,7 +357,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		 **/
 		txtprzeciwnikHP.setText("BOT_HP:" + String.valueOf(player2.getHealth()));
 		txtplayerHP.setText("HP:" + String.valueOf(player.getHealth()));
-
+		
 		// TODO Auto-generated method stub
 
 	}

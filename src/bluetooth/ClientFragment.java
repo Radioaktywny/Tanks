@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import game_engine_multiplayer.Game_multiplayer;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -148,9 +149,13 @@ public class ClientFragment extends Fragment implements ListAdapter {
 	{
 		if(sparowane.contains(MAC))
 		{
-		BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();		
-		BluetoothDevice serwer = ba.getRemoteDevice(MAC);   		
-		new Thread(new ClientBluetooth(serwer)).start();
+		
+		Game_multiplayer gm= new Game_multiplayer();
+		Intent activity= new Intent(getActivity(),gm.getClass());
+		activity.putExtra("MAC", MAC);
+		//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
+		startActivity(activity); 
+		getActivity().finish();
 		}
 		else
 		{

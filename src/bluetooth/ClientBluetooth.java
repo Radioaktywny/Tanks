@@ -12,15 +12,15 @@ import android.util.Log;
 public class ClientBluetooth implements Runnable {
     private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
-    private String odebrane;
-    private String wyslij;
+    private String odebrane="brak";
+    private String danedowyslania="brak";
     public ClientBluetooth(BluetoothDevice device) {       
         BluetoothSocket tmp = null;
         mmDevice = device;
         try {            
         	UUID uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
             tmp = device.createRfcommSocketToServiceRecord(uuid);
-        } catch (Exception e) { }
+        } catch (Exception e) {e.printStackTrace(); }
         mmSocket = tmp;
     }
     public synchronized String getOdebrane()
@@ -29,7 +29,7 @@ public class ClientBluetooth implements Runnable {
     }
     public synchronized void wyslij(String dane)
     {
-    	wyslij=dane;
+    	danedowyslania=dane;
     }
     public void run() {
          try {     
@@ -43,12 +43,12 @@ public class ClientBluetooth implements Runnable {
             {
             	i++;
             	String s=in.readLine();
-            	out.println(wyslij);
+            	out.println(danedowyslania);
             	odebrane=s;           	
             	if(false)
             		break;
-            	Log.d("INFO"+i,odebrane);
-            	wyslij(i+"Klient Maciek jest fajny blutacz super dziala kurde nie wiem jak ale to dziala omg omg xdd");
+            	Log.d("INFO KLIENT",odebrane);
+            	
             }           
             
         } catch (Exception ce) {
