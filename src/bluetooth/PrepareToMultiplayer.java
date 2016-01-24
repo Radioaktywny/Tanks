@@ -14,13 +14,13 @@ public class PrepareToMultiplayer
 	public PrepareToMultiplayer() {
 		// TODO Auto-generated constructor stub
 	}
-	public void createStringToSend(Bullet bullet)
+	private void createStringToSend(Bullet bullet)
 	{
 		iWillsendIt=String.valueOf(xy[0])+";"+String.valueOf(xy[1]);
 		int dir[]= bullet.getDirection();
 		iWillsendIt=iWillsendIt+";"+bullet.getPower()+";"+dir[0]+";"+dir[1]+";?";
 	}
-	public synchronized void  createStringToSend()
+	private synchronized void  createStringToSend()
 	{
 		iWillsendIt=String.valueOf(xy[0])+";"+String.valueOf(xy[1])+";?";
 	}
@@ -93,6 +93,11 @@ public class PrepareToMultiplayer
 	public synchronized String sendToThread()
 	{		
 		createStringToSend();
+		return iWillsendIt;
+	}
+	public String sendToThread(Bullet bullet)
+	{
+		createStringToSend(bullet);
 		return iWillsendIt;
 	}
 }

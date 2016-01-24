@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.UUID;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
@@ -37,14 +38,15 @@ public class ClientBluetooth extends AsyncTask<Void, String, Void> {
 	protected Void doInBackground(Void... params) {
 		try {     
         	Log.d("INFO","Próba po³¹czenia");
+        	BluetoothAdapter.getDefaultAdapter();
             mmSocket.connect();
             Log.d("INFO","Po³¹czono z socketem");
             BufferedReader in = new BufferedReader(new InputStreamReader(mmSocket.getInputStream()));
             PrintWriter out = new PrintWriter(mmSocket.getOutputStream(),true);
-            int i=0;
+            
             while(true)
             {
-            	i++;
+            	
             	String s=in.readLine();
             	out.println(danedowyslania);
             	onProgressUpdate(s);  

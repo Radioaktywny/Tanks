@@ -54,6 +54,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	boolean dostelem = false;
 	SerwerBluetooth serwer=null;
 	ClientBluetooth client=null;
+	private String ostatniRuchczolgu=null;
 	private PrepareToMultiplayer multiStrings= new PrepareToMultiplayer();
 	public GamePanelMultiplayer(Context context, View v2,SerwerBluetooth serwer) {
 		super(context);
@@ -157,8 +158,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			{
 			this.client.wyslij(multiStrings.sendToThread());
 			}
-		Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
-		Log.d("player",String.valueOf(player2.getX())+" "+String.valueOf(player2.getY()));
+//		Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
+//		Log.d("player",String.valueOf(player2.getX())+" "+String.valueOf(player2.getY()));
 	}
 	public void secondplayer()
 	{
@@ -171,23 +172,33 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			multiStrings.sendTogame(client.getOdebrane());
 		int i[]=multiStrings.getDirectionFromBT();
 		if (i[0]==0) {
+			ostatniRuchczolgu="lewa";
 			player2.setLeft(true);
 
 		} else if (i[0]==2) {
+			ostatniRuchczolgu="prawa";
 			player2.setRight(true);
 
 		} else if (i[1]==0) {
+			ostatniRuchczolgu="dol";
 			player2.setDown(true);
 
 		}
 		else if (i[1]==2) {
+			ostatniRuchczolgu="gora";
 			player2.setUp(true);
 
 		}		
 		else {
 			player2.setNo();
 		}	
-		
+		try{
+			przeciwnikstrzela(multiStrings.getBullet());
+		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public void update() {
@@ -290,6 +301,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	}
 
 	public void strzel(String ostatni_ruch_czolgu, String rodzaj_pocisku) {
+		Bullet bullet;
 		try {
 			int speed = 1;
 			int power = 1;
@@ -301,22 +313,67 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				power = 50;
 			}
 			if (ostatni_ruch_czolgu.equals("prawa"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + 120, player.getY() + 40, 1, 0, power, speed));
+			{	bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+						player.getX() + 120, player.getY() + 40, 1, 0, power, speed);
+				multiStrings.sendToThread(bullet);
+				lista.add(bullet);
+			}
 			else if (ostatni_ruch_czolgu.equals("lewa"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+			{
+				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
 						player.getX() - 120, player.getY() + 40, -1, 0, power, speed));
+				multiStrings.sendToThread(bullet);
+			}
 			else if (ostatni_ruch_czolgu.equals("gora"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
+			{
+				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
 						player.getY() - 120, 0, -1, power, speed));
+				multiStrings.sendToThread(bullet);
+			}
 			else if (ostatni_ruch_czolgu.equals("dol"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
+			{
+				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
 						player.getY() + 120, 0, 1, power, speed));
+				multiStrings.sendToThread(bullet);
+			}
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}
 	}
-
+	public void przeciwnikstrzela(int[] strzal)
+	{
+		String rodzaj_pocisku = null;
+		try {
+			int speed = 1;
+			int power = 1;
+			if (strzal[0]==10) {
+				speed = 13;
+				power = 10;
+				rodzaj_pocisku="pocisk_1";
+			} else if (strzal[0]==50) {
+				speed = 10;
+				power = 50;
+				rodzaj_pocisku="nuke";
+			}
+			
+			if (ostatniRuchczolgu.equals("prawa"))
+				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku),
+						player.getX() + 120, player.getY() + 40, 1, 0, power, speed));
+			else if (ostatniRuchczolgu.equals("lewa"))
+				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku),
+						player.getX() - 120, player.getY() + 40, -1, 0, power, speed));
+			else if (ostatniRuchczolgu.equals("gora"))
+				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku), player.getX() + 40,
+						player.getY() - 120, 0, -1, power, speed));
+			else if (ostatniRuchczolgu.equals("dol"))
+				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku), player.getX() + 40,
+						player.getY() + 120, 0, 1, power, speed));
+		} catch (Exception e) {
+			Log.d("przycisk", e.getMessage());
+		}
+		
+		
+	}
 	private Bitmap odwrocony_obrazek_strzalu(String kierunek, String rodzaj_pocisku) {
 		int obroc = 0;
 		Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
