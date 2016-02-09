@@ -11,11 +11,12 @@ import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class ClientBluetooth extends AsyncTask<Void, String, Void> {
+public class ClientBluetooth implements Runnable{
     private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
-    private volatile String odebrane="brak";
+    private volatile static String odebrane="brak";
     private volatile String danedowyslania="brak";
+    private volatile static PrintWriter out;
     public ClientBluetooth(BluetoothDevice device) {       
         BluetoothSocket tmp = null;
         mmDevice = device;
@@ -29,32 +30,34 @@ public class ClientBluetooth extends AsyncTask<Void, String, Void> {
     {
     	return odebrane;
     }
-    public synchronized void wyslij(String dane)
-    {
+    public void wyslij(String dane)
+    {    	
     	danedowyslania=dane;
-    }
-   
+    	out.println(dane);
+    }  
+
 	@Override
-	protected Void doInBackground(Void... params) {
+	public void run() {
+
 		try {     
         	Log.d("INFO","Próba po³¹czenia");
         	BluetoothAdapter.getDefaultAdapter();
             mmSocket.connect();
             Log.d("INFO","Po³¹czono z socketem");
             BufferedReader in = new BufferedReader(new InputStreamReader(mmSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(mmSocket.getOutputStream(),true);
-            
+            out = new PrintWriter(mmSocket.getOutputStream(),true);
+            int i=0;
             while(true)
             {
             	
             	String s=in.readLine();
-            	out.println(danedowyslania);
-            	onProgressUpdate(s);  
+            	//out.println(danedowyslania);
+            	odebrane=s;  
             	
             	if(false)
             		break;
-            	Log.d("INFO KLIENT",odebrane);
-            	
+            	Log.d("INFO KLIENT",s);
+            	++i;
             }           
             
         } catch (Exception ce) {
@@ -64,11 +67,6 @@ public class ClientBluetooth extends AsyncTask<Void, String, Void> {
         }
  
 		// TODO Auto-generated method stub
-		return null;
-	} 
-	@Override
-	protected void onProgressUpdate(String... values) {
-		// TODO Auto-generated method stub
-		odebrane=values[0];
+		
 	}
 }

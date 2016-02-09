@@ -12,11 +12,12 @@ import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class SerwerBluetooth extends AsyncTask<Void, String, Void>  {
+public class SerwerBluetooth implements Runnable  {
     private final BluetoothServerSocket mmServerSocket;
-	private volatile String odebrane="brak";
+	private volatile static String odebrane="brak";
 	private volatile String danedowyslania="brak";
- 
+	boolean isFree=true;
+	private volatile static PrintWriter out;
     public SerwerBluetooth() {
     	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();     
         BluetoothServerSocket tmp = null;
@@ -28,19 +29,20 @@ public class SerwerBluetooth extends AsyncTask<Void, String, Void>  {
     }
     public String getOdebrane()
     {
-    	Log.d("odebrane", odebrane);
+    	Log.d("odebrane Game", odebrane);
     	return odebrane;
     	
     }
     public void wyslij(String dane)
     {
+    	
     	danedowyslania=dane;
+    	out.println(dane);
     }  
-	@Override
-	protected Void doInBackground(Void... params) 
-	{
 
-    	Log.d("INFO","Uruchamiam serwer");
+	@Override
+	public void run() {
+		Log.d("INFO","Uruchamiam serwer");
         BluetoothSocket socket = null;       
         
             try {
@@ -48,19 +50,20 @@ public class SerwerBluetooth extends AsyncTask<Void, String, Void>  {
                 socket = mmServerSocket.accept();
                 Log.d("INFO","Mam clienta!");
                 
-                PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
+                out = new PrintWriter(socket.getOutputStream(),true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             //   int i=0;
                 while(true)
                 {
                 	
-                	out.println(danedowyslania);
+                	//out.println(danedowyslania);
                 	String s=in.readLine();
-                	onProgressUpdate(s);
+                	odebrane=s;
                 	               	
                 	if(false)
                 		break;
-                	Log.d("INFO SERWER ",odebrane);
-                	
+                	Log.d("INFO SERWER ",s);
+                	//i++;
                 }        
                 
                
@@ -78,12 +81,7 @@ public class SerwerBluetooth extends AsyncTask<Void, String, Void>  {
 				}
                 
             }
-		return null;
-	}
-	@Override
-    protected void onProgressUpdate(String... s) {		
-		odebrane=s[0]; 	
-		Log.d("odebrane", odebrane);
+		// TODO Auto-generated method stub
 		
 	}
 

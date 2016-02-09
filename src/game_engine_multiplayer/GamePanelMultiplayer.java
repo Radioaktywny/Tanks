@@ -63,7 +63,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
 		this.serwer=serwer;
-		this.serwer.execute();
+		new Thread(this.serwer).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
@@ -76,7 +76,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
 		this.client=client;
-		this.client.execute();
+		new Thread(this.client).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
@@ -153,10 +153,13 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		if(serwer!=null)
 			{	
 				this.serwer.wyslij(multiStrings.sendToThread());
+			//this.serwer.wyslij("1;2;?");
+				//Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
 			}
 		if(client!=null)
 			{
 			this.client.wyslij(multiStrings.sendToThread());
+			//Log.d("playe2r",String.valueOf(player.getX())+String.valueOf(player.getY()));
 			}
 //		Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
 //		Log.d("player",String.valueOf(player2.getX())+" "+String.valueOf(player2.getY()));
