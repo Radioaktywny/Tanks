@@ -29,8 +29,10 @@ public class SerwerBluetooth implements Runnable  {
     }
     public String getOdebrane()
     {
-    	Log.d("odebrane Game", odebrane);
-    	return odebrane;
+    	String wyslij=odebrane;
+    	if(odebrane.length()>7)
+    		odebrane="1;1;?";
+    	return wyslij;
     	
     }
     public void wyslij(String dane)

@@ -206,6 +206,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	
 	public void update() {
 
+		
 		if (player.getPlaying()) {
 			bg.update();
 			checkMove(player);
@@ -318,27 +319,55 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			if (ostatni_ruch_czolgu.equals("prawa"))
 			{	bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
 						player.getX() + 120, player.getY() + 40, 1, 0, power, speed);
-				multiStrings.sendToThread(bullet);
+			if(serwer!=null)
+			{
+				serwer.wyslij(multiStrings.sendToThread(bullet));
+			}			
+			else
+				client.wyslij(multiStrings.sendToThread(bullet));
+				//multiStrings.sendToThread(bullet);
 				lista.add(bullet);
 			}
 			else if (ostatni_ruch_czolgu.equals("lewa"))
 			{
 				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
 						player.getX() - 120, player.getY() + 40, -1, 0, power, speed));
-				multiStrings.sendToThread(bullet);
+				if(serwer!=null)
+				{
+					serwer.wyslij(multiStrings.sendToThread(bullet));
+				}
+				else
+					client.wyslij(multiStrings.sendToThread(bullet));
+					//multiStrings.sendToThread(bullet);
+					//lista.add(bullet);
 			}
 			else if (ostatni_ruch_czolgu.equals("gora"))
 			{
 				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
 						player.getY() - 120, 0, -1, power, speed));
-				multiStrings.sendToThread(bullet);
+				if(serwer!=null)
+				{
+					serwer.wyslij(multiStrings.sendToThread(bullet));
+				}
+				else
+					client.wyslij(multiStrings.sendToThread(bullet));
+					//multiStrings.sendToThread(bullet);
+					//lista.add(bullet);
 			}
 			else if (ostatni_ruch_czolgu.equals("dol"))
 			{
 				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
 						player.getY() + 120, 0, 1, power, speed));
-				multiStrings.sendToThread(bullet);
+				if(serwer!=null)
+				{
+					serwer.wyslij(multiStrings.sendToThread(bullet));
+				}
+				else
+					client.wyslij(multiStrings.sendToThread(bullet));
+					//multiStrings.sendToThread(bullet);
+					//lista.add(bullet);
 			}
+			
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}
@@ -359,18 +388,18 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				rodzaj_pocisku="nuke";
 			}
 			
-			if (ostatniRuchczolgu.equals("prawa"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku),
-						player.getX() + 120, player.getY() + 40, 1, 0, power, speed));
-			else if (ostatniRuchczolgu.equals("lewa"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku),
-						player.getX() - 120, player.getY() + 40, -1, 0, power, speed));
-			else if (ostatniRuchczolgu.equals("gora"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku), player.getX() + 40,
-						player.getY() - 120, 0, -1, power, speed));
-			else if (ostatniRuchczolgu.equals("dol"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatniRuchczolgu, rodzaj_pocisku), player.getX() + 40,
-						player.getY() + 120, 0, 1, power, speed));
+			if(strzal[1]==1&&strzal[2]==0)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("prawa", rodzaj_pocisku),
+						player2.getX() + 120, player2.getY() + 40, 1, 0, power, speed));
+			else if (strzal[1]==-1&&strzal[2]==0)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("lewa", rodzaj_pocisku),
+						player2.getX() - 120, player2.getY() + 40, -1, 0, power, speed));
+			else if (strzal[1]==0&&strzal[2]==-1)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("gora", rodzaj_pocisku), player2.getX() + 40,
+						player2.getY() - 120, 0, -1, power, speed));
+			else if (strzal[1]==0&&strzal[2]==1)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("dol", rodzaj_pocisku), player2.getX() + 40,
+						player2.getY() + 120, 0, 1, power, speed));
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}

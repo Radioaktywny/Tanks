@@ -65,17 +65,21 @@ public class PrepareToMultiplayer
 							bulletDirection[1]=Integer.valueOf(iGotThis.substring(lasti,j));
 							++licznik;
 							lasti=j+1;
+							
 					}
 					
 					}
+				break;
 			}
 		}
+		
 		}		
 		Log.d("wartosci",String.valueOf(xy[0])+String.valueOf(xy[1])+"  "+iGotThis);
 		return xy;	
 	}
 	public synchronized void  sendTogame(String stringfromBT)
 	{
+		
 		this.iGotThis=stringfromBT;		
 	}
 	public int[] getBullet()
