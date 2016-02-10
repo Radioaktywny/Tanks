@@ -52,35 +52,38 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private Player player2;
 	private int[] zakres = new int[2];
 	boolean dostelem = false;
-	SerwerBluetooth serwer=null;
-	ClientBluetooth client=null;
-	private String ostatniRuchczolgu=null;
-	private PrepareToMultiplayer multiStrings= new PrepareToMultiplayer();
-	public GamePanelMultiplayer(Context context, View v2,SerwerBluetooth serwer) {
+	SerwerBluetooth serwer = null;
+	ClientBluetooth client = null;
+	private String ostatniRuchczolgu = null;
+	private PrepareToMultiplayer multiStrings = new PrepareToMultiplayer();
+	private Bitmap scaled;
+
+	public GamePanelMultiplayer(Context context, View v2, SerwerBluetooth serwer) {
 		super(context);
 		v = v2;
 		// add the callback to the surfaceholder to intercept events
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
-		this.serwer=serwer;
+		this.serwer = serwer;
 		new Thread(this.serwer).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
-		
+
 	}
-	public GamePanelMultiplayer(Context context, View v2,ClientBluetooth client) {
+
+	public GamePanelMultiplayer(Context context, View v2, ClientBluetooth client) {
 		super(context);
 		v = v2;
 		// add the callback to the surfaceholder to intercept events
 		getHolder().addCallback(this);
 		thread = new MainThreadMultiplayer(getHolder(), this);
-		this.client=client;
+		this.client = client;
 		new Thread(this.client).start();
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
-		
+
 	}
 
 	@Override
@@ -105,13 +108,20 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 
-		bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.tlo));
+		Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.tlo);
+		float scale = (float) background.getHeight() / (float) getHeight();
+		int newWidth = Math.round(background.getWidth() / scale);
+		int newHeight = Math.round(background.getHeight() / scale);
+		scaled = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
+
+		// bg = new Background(BitmapFactory.decodeResource(getResources(),
+		// R.drawable.tlo));
 		// bg.setVector(-5);
 		// we can safely start the game loop
 		thread.setRunning(true);
 		thread.start();
-		player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank2), 30, 40, 30, 100, 100);
-		player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank2), 60, 40, 30, 100, 100);
+		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),40,40,true), 30, 40, 30, 100, 100);
+		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),40,40,true), 60, 40, 30, 100, 100);
 		player.setPlaying(true);
 		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
@@ -125,90 +135,83 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		return false;
 
 	}
-	
+
 	public void steruj(String steruj) {
 		ruch_czolgu = steruj;
 
 		if (steruj.equals("lewa")) {
 			player.setLeft(true);
-			multiStrings.setDirectionToSend(new int[]{0,1});
+			multiStrings.setDirectionToSend(new int[] { 0, 1 });
 
 		} else if (steruj.equals("prawa")) {
 			player.setRight(true);
-			multiStrings.setDirectionToSend(new int[]{2,1});
+			multiStrings.setDirectionToSend(new int[] { 2, 1 });
 
 		} else if (steruj.equals("dol")) {
 			player.setDown(true);
-			multiStrings.setDirectionToSend(new int[]{1,0});
-		}
-		else if (steruj.equals("gora")) {
+			multiStrings.setDirectionToSend(new int[] { 1, 0 });
+		} else if (steruj.equals("gora")) {
 			player.setUp(true);
-			multiStrings.setDirectionToSend(new int[]{1,2});
+			multiStrings.setDirectionToSend(new int[] { 1, 2 });
 
 		} else {
 			player.setNo();
-			multiStrings.setDirectionToSend(new int[]{1,1});
+			multiStrings.setDirectionToSend(new int[] { 1, 1 });
 		}
-		
-		if(serwer!=null)
-			{	
-				this.serwer.wyslij(multiStrings.sendToThread());
-			//this.serwer.wyslij("1;2;?");
-				//Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
-			}
-		if(client!=null)
-			{
+
+		if (serwer != null) {
+			this.serwer.wyslij(multiStrings.sendToThread());
+			// this.serwer.wyslij("1;2;?");
+			// Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
+		}
+		if (client != null) {
 			this.client.wyslij(multiStrings.sendToThread());
-			//Log.d("playe2r",String.valueOf(player.getX())+String.valueOf(player.getY()));
-			}
-//		Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
-//		Log.d("player",String.valueOf(player2.getX())+" "+String.valueOf(player2.getY()));
-	}
-	public void secondplayer()
-	{
-		if(serwer!=null)
-		{
-		multiStrings.sendTogame(serwer.getOdebrane());
-		Log.d("sendtogame", "true");
+			// Log.d("playe2r",String.valueOf(player.getX())+String.valueOf(player.getY()));
 		}
-		if(client!=null)
+		// Log.d("player",String.valueOf(player.getX())+String.valueOf(player.getY()));
+		// Log.d("player",String.valueOf(player2.getX())+"
+		// "+String.valueOf(player2.getY()));
+	}
+
+	public void secondplayer() {
+		if (serwer != null) {
+			multiStrings.sendTogame(serwer.getOdebrane());
+			Log.d("sendtogame", "true");
+		}
+		if (client != null)
 			multiStrings.sendTogame(client.getOdebrane());
-		int i[]=multiStrings.getDirectionFromBT();
-		if (i[0]==0) {
-			ostatniRuchczolgu="lewa";
+		int i[] = multiStrings.getDirectionFromBT();
+		if (i[0] == 0) {
+			ostatniRuchczolgu = "lewa";
 			player2.setLeft(true);
-			
-		} else if (i[0]==2) {
-			ostatniRuchczolgu="prawa";
+
+		} else if (i[0] == 2) {
+			ostatniRuchczolgu = "prawa";
 			player2.setRight(true);
 
-		} else if (i[1]==0) {
-			ostatniRuchczolgu="dol";
+		} else if (i[1] == 0) {
+			ostatniRuchczolgu = "dol";
 			player2.setDown(true);
 
-		}
-		else if (i[1]==2) {
-			ostatniRuchczolgu="gora";
+		} else if (i[1] == 2) {
+			ostatniRuchczolgu = "gora";
 			player2.setUp(true);
 
-		}		
-		else {
+		} else {
 			player2.setNo();
-		}	
-		try{
-			przeciwnikstrzela(multiStrings.getBullet());
 		}
-		catch(NullPointerException e)
-		{
+		try {
+			przeciwnikstrzela(multiStrings.getBullet());
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void update() {
-		if(explosion!=null)
-		explosion.update();
+		if (explosion != null)
+			explosion.update();
 		if (player.getPlaying()) {
-			bg.update();
+			// bg.update();
 			checkMove(player);
 			checkMove(player2);
 			// Log.d("METRYCKA",""); tu na dole dostosowalem do swojego ekrany
@@ -224,7 +227,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				}
 			} catch (Exception e) {
 				Log.d("Przycisk", e.getMessage());
-				bg.update();
+				// bg.update();
 				player.update();
 				player2.update();
 			}
@@ -232,29 +235,36 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	}
 
 	public void checkMove(Player player) {
-		if (player.getY() > 40 && player.getY() < 1280 && player.getX() > 40 && player.getX() < 2250) {
+		if (player.getY() > 20 && player.getY() < getHeight() - 60 && player.getX() > 20
+				&& player.getX() < getWidth() - 60) {
 			player.update();
 		} else {
-			if (player.getY() <= 40 && (!ruch_czolgu.equals("gora")))
-				player.update();
-			if (player.getY() >= 1280 && (!ruch_czolgu.equals("dol")))
-				player.update();
-			if (player.getX() <= 40 && (!ruch_czolgu.equals("lewa")))
-				player.update();
-			if (player.getX() >= 2250 && (!ruch_czolgu.equals("prawa")))
-				player.update();
+			if (player.getY() <= 20 && (!ruch_czolgu.equals("gora")))
+				if (player.getX() >= 20 && player.getX() <= getWidth() - 60)
+					player.update();
+			if (player.getY() >= getHeight() - 60 && (!ruch_czolgu.equals("dol")))
+				if (player.getX() >= 20 && player.getX() <= getWidth() - 60)
+					player.update();
+			if (player.getX() <= 20 && (!ruch_czolgu.equals("lewa")))
+				if (player.getY() >= 20 && player.getY() <= getHeight() - 60)
+					player.update();
+			if (player.getX() >= getWidth() - 60 && (!ruch_czolgu.equals("prawa")))
+				if (player.getY() >= 20 && player.getY() <= getHeight() - 60)
+					player.update();
 		}
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
+		canvas.drawBitmap(scaled, 0, 0, null);
 		float scaleFactorX = getWidth() / (getWidth() * 1.f);
 		float scaleFactorY = getHeight() / (getHeight() * 1.f);
 		if (canvas != null) {
 			final int savedState = canvas.save();
 			canvas.scale(scaleFactorX, scaleFactorY);
-			bg.draw(canvas);
-			if(explosion!=null)explosion.draw(canvas);
+			// bg.draw(canvas);
+			if (explosion != null)
+				explosion.draw(canvas);
 			if (player2.getHealth() > 0)
 				player2.draw(canvas);
 			if (player.getHealth() > 0)
@@ -277,13 +287,11 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			Player zmienny = player2;
 			int zakresX = zmienny.getX() - lista.get(i).getX();
 			int zakresY = zmienny.getY() - lista.get(i).getY();
-			if (zakresX >= -115 && zakresX <= 20 && zakresY >= -95 && zakresY <= 20) {
+			if (zakresX >= -40 && zakresX <= 0 && zakresY >= -40 && zakresY <= 0) {
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "BOT:"
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player2.getX(), player2.getY() - 30, 64, 64, 16);
-				
-				//explosion.draw(canvas);
+						player2.getX()-20, player2.getY() - 20, 64, 64, 16);
 				player2.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -291,14 +299,13 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			Player zmienny = player;
 			int zakresX = zmienny.getX() - lista.get(i).getX();
 			int zakresY = zmienny.getY() - lista.get(i).getY();
-			if (zakresX >= -115 && zakresX <= 20 && zakresY >= -95 && zakresY <= 20) {
+			if (zakresX >= -40 && zakresX <= 0 && zakresY >= -40 && zakresY <= 0) {
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "PLEYER:"
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player.getX(), player.getY() - 30, 64, 64, 16);
-				
-				//explosion.draw(canvas);
+						player.getX() -20 , player.getY() - 20, 64, 64, 16);
+
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -317,96 +324,82 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				speed = 10;
 				power = 50;
 			}
-			if (ostatni_ruch_czolgu.equals("prawa"))
-			{	bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + 120, player.getY() + 40, 1, 0, power, speed);
-			if(serwer!=null)
-			{
-				serwer.wyslij(multiStrings.sendToThread(bullet));
-			}			
-			else
-				client.wyslij(multiStrings.sendToThread(bullet));
-				//multiStrings.sendToThread(bullet);
+			if (ostatni_ruch_czolgu.equals("prawa")) {
+				bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
+						player.getY() + 20, 1, 0, power, speed);
+				if (serwer != null) {
+					serwer.wyslij(multiStrings.sendToThread(bullet));
+				} else
+					client.wyslij(multiStrings.sendToThread(bullet));
+				// multiStrings.sendToThread(bullet);
 				lista.add(bullet);
-			}
-			else if (ostatni_ruch_czolgu.equals("lewa"))
-			{
-				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() - 120, player.getY() + 40, -1, 0, power, speed));
-				if(serwer!=null)
-				{
+			} else if (ostatni_ruch_czolgu.equals("lewa")) {
+				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+						player.getX() - 40, player.getY() + 20, -1, 0, power, speed));
+				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
-				}
-				else
+				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-					//multiStrings.sendToThread(bullet);
-					//lista.add(bullet);
-			}
-			else if (ostatni_ruch_czolgu.equals("gora"))
-			{
-				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
-						player.getY() - 120, 0, -1, power, speed));
-				if(serwer!=null)
-				{
+				// multiStrings.sendToThread(bullet);
+				// lista.add(bullet);
+			} else if (ostatni_ruch_czolgu.equals("gora")) {
+				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+						player.getX() + 20, player.getY() - 40, 0, -1, power, speed));
+				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
-				}
-				else
+				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-					//multiStrings.sendToThread(bullet);
-					//lista.add(bullet);
-			}
-			else if (ostatni_ruch_czolgu.equals("dol"))
-			{
-				lista.add(bullet=new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
-						player.getY() + 120, 0, 1, power, speed));
-				if(serwer!=null)
-				{
+				// multiStrings.sendToThread(bullet);
+				// lista.add(bullet);
+			} else if (ostatni_ruch_czolgu.equals("dol")) {
+				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+						player.getX() + 20, player.getY() + 40, 0, 1, power, speed));
+				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
-				}
-				else
+				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-					//multiStrings.sendToThread(bullet);
-					//lista.add(bullet);
+				// multiStrings.sendToThread(bullet);
+				// lista.add(bullet);
 			}
-			
+
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}
 	}
-	public void przeciwnikstrzela(int[] strzal)
-	{
+
+	public void przeciwnikstrzela(int[] strzal) {
 		String rodzaj_pocisku = null;
 		try {
 			int speed = 1;
 			int power = 1;
-			if (strzal[0]==10) {
+			if (strzal[0] == 10) {
 				speed = 13;
 				power = 10;
-				rodzaj_pocisku="pocisk_1";
-			} else if (strzal[0]==50) {
+				rodzaj_pocisku = "pocisk_1";
+			} else if (strzal[0] == 50) {
 				speed = 10;
 				power = 50;
-				rodzaj_pocisku="nuke";
+				rodzaj_pocisku = "nuke";
 			}
-			
-			if(strzal[1]==1&&strzal[2]==0)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("prawa", rodzaj_pocisku),
-						player2.getX() + 120, player2.getY() + 40, 1, 0, power, speed));
-			else if (strzal[1]==-1&&strzal[2]==0)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("lewa", rodzaj_pocisku),
-						player2.getX() - 120, player2.getY() + 40, -1, 0, power, speed));
-			else if (strzal[1]==0&&strzal[2]==-1)
+
+			if (strzal[1] == 1 && strzal[2] == 0)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("prawa", rodzaj_pocisku), player2.getX() + 120,
+						player2.getY() + 40, 1, 0, power, speed));
+			else if (strzal[1] == -1 && strzal[2] == 0)
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("lewa", rodzaj_pocisku), player2.getX() - 120,
+						player2.getY() + 40, -1, 0, power, speed));
+			else if (strzal[1] == 0 && strzal[2] == -1)
 				lista.add(new Bullet(odwrocony_obrazek_strzalu("gora", rodzaj_pocisku), player2.getX() + 40,
 						player2.getY() - 120, 0, -1, power, speed));
-			else if (strzal[1]==0&&strzal[2]==1)
+			else if (strzal[1] == 0 && strzal[2] == 1)
 				lista.add(new Bullet(odwrocony_obrazek_strzalu("dol", rodzaj_pocisku), player2.getX() + 40,
 						player2.getY() + 120, 0, 1, power, speed));
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}
-		
-		
+
 	}
+
 	private Bitmap odwrocony_obrazek_strzalu(String kierunek, String rodzaj_pocisku) {
 		int obroc = 0;
 		Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
@@ -440,7 +433,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height, matrix, true);
 		return resizedBitmap;
 	}
-	
+
 	public void gui() {
 		/**
 		 * MEtoda dziala w watku do wyswietlania hp ale nie wiem jakim cudem wie
@@ -448,7 +441,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		 **/
 		txtprzeciwnikHP.setText("BOT_HP:" + String.valueOf(player2.getHealth()));
 		txtplayerHP.setText("HP:" + String.valueOf(player.getHealth()));
-		
+
 		// TODO Auto-generated method stub
 
 	}

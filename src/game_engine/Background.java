@@ -15,10 +15,8 @@ public class Background
 		
 	}
 	public void update()
-	{
-		
+	{		
 		x+=dx;
-		
 	}
 	public void draw(Canvas canvas)
 	{
