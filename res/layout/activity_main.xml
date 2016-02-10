@@ -28,4 +28,39 @@
         android:background="@drawable/zagraj_online"
         android:onClick="startBlutacz" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView3"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@+id/imageView2"
+        android:src="@drawable/tank2" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_alignLeft="@+id/imageView2"
+        android:src="@drawable/pocisk_1" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView4"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:src="@drawable/pocisk_1" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/button1"
+        android:layout_marginRight="62dp"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/tank2" />
+
 </RelativeLayout>
