@@ -139,7 +139,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     		int licz=1;
     		bg.update();player2.update(player);
     		//Log.d("METRYCKA",""); tu na dole dostosowalem do swojego ekrany narazie nie zrpobilem auto pobierania rozmiaru
-    		if(player.getY() > 40 && player.getY() < 1280 && player.getX() > 40 && player.getX() < 2250)
+    		if(player.getY() > 40 && player.getY() < getHeight()-40 && player.getX() > 40 && player.getX() < getWidth()-40)
     		{
     			player.update();
     		//player2.update(player);
@@ -148,11 +148,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     		{
     		if(player.getY() <= 40 &&(!ruch_czolgu.equals("gora")))
     			player.update();
-    		if(player.getY() >= 1280 &&(!ruch_czolgu.equals("dol")))
+    		if(player.getY() >= getHeight()-40 &&(!ruch_czolgu.equals("dol")))
     			player.update();
     		if(player.getX() <= 40 &&(!ruch_czolgu.equals("lewa")))
     			player.update();
-        	if(player.getX() >= 2250 &&(!ruch_czolgu.equals("prawa")))
+        	if(player.getX() >= getWidth()-40&&(!ruch_czolgu.equals("prawa")))
         		player.update();
     		}
     		//Log.d("PLAYER", "X"+String.valueOf(player.getX()) + "Y"+String.valueOf(player.getY()));

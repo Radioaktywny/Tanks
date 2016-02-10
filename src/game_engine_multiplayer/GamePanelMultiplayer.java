@@ -205,8 +205,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	}
 	
 	public void update() {
-
-		
+		if(explosion!=null)
+		explosion.update();
 		if (player.getPlaying()) {
 			bg.update();
 			checkMove(player);
@@ -254,6 +254,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			final int savedState = canvas.save();
 			canvas.scale(scaleFactorX, scaleFactorY);
 			bg.draw(canvas);
+			if(explosion!=null)explosion.draw(canvas);
 			if (player2.getHealth() > 0)
 				player2.draw(canvas);
 			if (player.getHealth() > 0)
@@ -261,7 +262,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			if (!lista.isEmpty()) {
 				for (int i = 0; i < lista.size(); i++) {
 					lista.get(i).draw(canvas);
-					sprawdz_czy_trafilem(false, i, canvas);// funkcja wymaga
+					sprawdz_czy_trafilem(false, i, canvas); // funkcja wymaga
 															// poprawek
 															// stylistycznych
 					sprawdz_czy_trafilem(true, i, canvas);
@@ -281,8 +282,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
 						player2.getX(), player2.getY() - 30, 64, 64, 16);
-				explosion.update();
-				explosion.draw(canvas);
+				
+				//explosion.draw(canvas);
 				player2.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -296,8 +297,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
 						player.getX(), player.getY() - 30, 64, 64, 16);
-				explosion.update();
-				explosion.draw(canvas);
+				
+				//explosion.draw(canvas);
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}

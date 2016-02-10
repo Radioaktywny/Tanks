@@ -24,14 +24,12 @@ public class Explosion {
 
         for(int i = 0; i<image.length; i++)
         {
-            if(i%4==0&&i>0)row++;
+            if(i%4==0&&i>0)
+            	row++;
             image[i] = Bitmap.createBitmap(spritesheet, (i-(4*row))*width, row*height, width, height);
         }
+        animation.setDelay(50);
         animation.setFrames(image);
-        animation.setDelay(30);
-
-
-
     }
     public void draw(Canvas canvas)
     {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -39,7 +40,13 @@ public class SerwerBluetooth implements Runnable  {
     {
     	
     	danedowyslania=dane;
+    	try{
     	out.println(dane);
+    	}
+    	catch(Exception e)
+    	{
+    		
+    	}
     }  
 
 	@Override
