@@ -188,7 +188,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	public void secondplayer() {
 		if (serwer != null) {
 			multiStrings.sendTogame(serwer.getOdebrane());
-			Log.d("sendtogame", "true");
 		}
 		if (client != null)
 			multiStrings.sendTogame(client.getOdebrane());
@@ -238,8 +237,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 					}
 				}
 			} catch (Exception e) {
-				Log.d("Przycisk", e.getMessage());
-				// bg.update();
 				player.update();
 				player2.update();
 			}
@@ -271,8 +268,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			final int savedState = canvas.save();
 			canvas.scale(scaleFactorX, scaleFactorY);
 			// bg.draw(canvas);
-			if (explosion != null)
-				explosion.draw(canvas);
+
 			if (player2.getHealth() > 0)
 				player2.draw(canvas);
 			if (player.getHealth() > 0)
@@ -286,6 +282,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 					sprawdz_czy_trafilem(true, i, canvas);
 				}
 			}
+			if (explosion != null)
+				explosion.draw(canvas);
 			canvas.restoreToCount(savedState);
 		}
 	}
@@ -299,7 +297,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "BOT:"
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0], explosionBox[1], 16);
+						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), 64,64,/*explosionBox[0], explosionBox[1],*/ 16);
 				player2.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -312,7 +310,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player.getX() +(int)((hitBoxTank[0]-explosionBox[0])/2) , player.getY() +(int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0], explosionBox[1], 16);
+						player.getX() +(int)((hitBoxTank[0]-explosionBox[0])/2) , player.getY() +(int)((hitBoxTank[1]-explosionBox[1])/2),64,64,/* explosionBox[0], explosionBox[1],*/ 16);
 
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
@@ -368,7 +366,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			}
 
 		} catch (Exception e) {
-			Log.d("przycisk", e.getMessage());
+			//Log.d("przycisk", e.getMessage());
 		}
 	}
 
@@ -400,7 +398,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				lista.add(new Bullet(odwrocony_obrazek_strzalu("dol", rodzaj_pocisku), player2.getX() + hitBoxTank[0],
 						player2.getY() + (int)(hitBoxTank[1]/2)-5, 0, 1, power, speed));
 		} catch (Exception e) {
-			Log.d("przycisk", e.getMessage());
+			//Log.d("przycisk", e.getMessage());
 		}
 
 	}

@@ -74,7 +74,6 @@ public class PrepareToMultiplayer
 		}
 		
 		}		
-		Log.d("wartosci",String.valueOf(xy[0])+String.valueOf(xy[1])+"  "+iGotThis);
 		return xy;	
 	}
 	public synchronized void  sendTogame(String stringfromBT)

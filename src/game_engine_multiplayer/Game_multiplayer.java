@@ -27,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import bluetooth.ClientBluetooth;
@@ -69,7 +70,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
         init();
 		init_joistick((JoystickView) findViewById(R.id.joystickView));
 		music();
-		init_button_strzal((Button) findViewById(R.id.strzal));
+		init_button_strzal((ImageButton) findViewById(R.id.strzal));
 }
 	private void init()
 	{
@@ -92,14 +93,14 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 		setRequestedOrientation((ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)/2);
 		
 	}
-	private void init_button_strzal(Button strzal) {
-		strzal.setOnClickListener(new OnClickListener() {
+	private void init_button_strzal(ImageButton imageButton) {
+		imageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				gameView.strzel(Ostatni_ruch_czolgu,"pocisk_1");				
 			}
 		});
-		strzal.setOnLongClickListener(new OnLongClickListener() {
+		imageButton.setOnLongClickListener(new OnLongClickListener() {
 			
 			
 			@Override

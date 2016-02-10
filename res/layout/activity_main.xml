@@ -6,31 +6,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="activities_menu.MainActivity" >
+    tools:context="activities_menu.MainActivity" 
+    android:background="#99FFCC">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-    <Button
+     <ImageButton
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="GRAJ" 
+        android:background="@drawable/graj_offline"
         android:onClick="startgame"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button1"
         android:layout_below="@+id/button1"
         android:layout_marginTop="47dp"
-        android:text="Blutacz"
+        android:background="@drawable/zagraj_online"
         android:onClick="startBlutacz" />
 
 </RelativeLayout>
