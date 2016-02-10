@@ -57,7 +57,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private String ostatniRuchczolgu = null;
 	private PrepareToMultiplayer multiStrings = new PrepareToMultiplayer();
 	private Bitmap scaled;
-
+	private double scaleBTM[]=new double[2];
+	private int hitBoxTank[]=new int[2];
 	public GamePanelMultiplayer(Context context, View v2, SerwerBluetooth serwer) {
 		super(context);
 		v = v2;
@@ -104,24 +105,35 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		}
 
 	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-
+	private void createBg()
+	{
 		Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.tlo);
 		float scale = (float) background.getHeight() / (float) getHeight();
+		Log.d("INFO ", String.valueOf(getHeight()));
 		int newWidth = Math.round(background.getWidth() / scale);
 		int newHeight = Math.round(background.getHeight() / scale);
-		scaled = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
-
 		// bg = new Background(BitmapFactory.decodeResource(getResources(),
 		// R.drawable.tlo));
 		// bg.setVector(-5);
 		// we can safely start the game loop
+		scaled = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
+	}
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		createBg();
+		//to s¹ wymiary mojego ekranu w pikselach dzieki temu tworze proste zmienne do skalowania sprawdz czy ladnie Ci to chodzi xD
+		scaleBTM[1]=40.0/540.0;
+		scaleBTM[0]=40.0/897.0;
+		
+		hitBoxTank[0]=(int)((float)getWidth() * scaleBTM[0]);
+		hitBoxTank[1]=(int)((float)getHeight() * scaleBTM[1]);
+		Log.d("INFO wymiar czolgu px", String.valueOf(hitBoxTank[0]));
+		Log.d("INFO wymiar czolgu px", String.valueOf(hitBoxTank[1]));
+
 		thread.setRunning(true);
 		thread.start();
-		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),40,40,true), 30, 40, 30, 100, 100);
-		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),40,40,true), 60, 40, 30, 100, 100);
+		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100);
+		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100);
 		player.setPlaying(true);
 		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
@@ -235,22 +247,18 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	}
 
 	public void checkMove(Player player) {
-		if (player.getY() > 20 && player.getY() < getHeight() - 60 && player.getX() > 20
-				&& player.getX() < getWidth() - 60) {
+		if (player.getY() > (int)(hitBoxTank[1]/2) && player.getY() < getHeight() - (int)((hitBoxTank[1]/2)*3) && player.getX() > (int)(hitBoxTank[0]/2)
+				&& player.getX() < getWidth() - (int)((hitBoxTank[0]/2)*3)) {
 			player.update();
 		} else {
-			if (player.getY() <= 20 && (!ruch_czolgu.equals("gora")))
-				if (player.getX() >= 20 && player.getX() <= getWidth() - 60)
-					player.update();
-			if (player.getY() >= getHeight() - 60 && (!ruch_czolgu.equals("dol")))
-				if (player.getX() >= 20 && player.getX() <= getWidth() - 60)
-					player.update();
-			if (player.getX() <= 20 && (!ruch_czolgu.equals("lewa")))
-				if (player.getY() >= 20 && player.getY() <= getHeight() - 60)
-					player.update();
-			if (player.getX() >= getWidth() - 60 && (!ruch_czolgu.equals("prawa")))
-				if (player.getY() >= 20 && player.getY() <= getHeight() - 60)
-					player.update();
+			if (player.getY() >= (int)(hitBoxTank[1]/2) && (ruch_czolgu.equals("gora")))
+				player.update();
+			if (player.getY() <= getHeight() - 60 && (ruch_czolgu.equals("dol")))
+				player.update();
+			if (player.getX() >= (int)(hitBoxTank[0]/2) && (ruch_czolgu.equals("lewa")))
+				player.update();
+			if (player.getX() <= getWidth() - (int)((hitBoxTank[0]/2)*3) && (ruch_czolgu.equals("prawa")))
+				player.update();
 		}
 	}
 
@@ -287,7 +295,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			Player zmienny = player2;
 			int zakresX = zmienny.getX() - lista.get(i).getX();
 			int zakresY = zmienny.getY() - lista.get(i).getY();
-			if (zakresX >= -40 && zakresX <= 0 && zakresY >= -40 && zakresY <= 0) {
+			if (zakresX >= -hitBoxTank[0] && zakresX <= 0 && zakresY >= -hitBoxTank[1] && zakresY <= 0) {
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "BOT:"
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
@@ -299,7 +307,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			Player zmienny = player;
 			int zakresX = zmienny.getX() - lista.get(i).getX();
 			int zakresY = zmienny.getY() - lista.get(i).getY();
-			if (zakresX >= -40 && zakresX <= 0 && zakresY >= -40 && zakresY <= 0) {
+			if (zakresX >= -hitBoxTank[0] && zakresX <= 0 && zakresY >= -hitBoxTank[1] && zakresY <= 0) {
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "PLEYER:"
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
@@ -325,41 +333,38 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				power = 50;
 			}
 			if (ostatni_ruch_czolgu.equals("prawa")) {
-				bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + 40,
-						player.getY() + 20, 1, 0, power, speed);
+				bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku), player.getX() + hitBoxTank[0]+3,
+						player.getY() + (int)(hitBoxTank[1]/2)-5 /*do poprawy*/, 1, 0, power, speed);
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-				// multiStrings.sendToThread(bullet);
+
 				lista.add(bullet);
 			} else if (ostatni_ruch_czolgu.equals("lewa")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() - 40, player.getY() + 20, -1, 0, power, speed));
+						player.getX() - hitBoxTank[0], player.getY() + (int)(hitBoxTank[1]/2) -5, -1, 0, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-				// multiStrings.sendToThread(bullet);
-				// lista.add(bullet);
+
 			} else if (ostatni_ruch_czolgu.equals("gora")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + 20, player.getY() - 40, 0, -1, power, speed));
+						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() - hitBoxTank[1], 0, -1, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-				// multiStrings.sendToThread(bullet);
-				// lista.add(bullet);
+
 			} else if (ostatni_ruch_czolgu.equals("dol")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + 20, player.getY() + 40, 0, 1, power, speed));
+						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() + hitBoxTank[1], 0, 1, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
 					client.wyslij(multiStrings.sendToThread(bullet));
-				// multiStrings.sendToThread(bullet);
-				// lista.add(bullet);
+
 			}
 
 		} catch (Exception e) {
@@ -383,17 +388,17 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			}
 
 			if (strzal[1] == 1 && strzal[2] == 0)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("prawa", rodzaj_pocisku), player2.getX() + 120,
-						player2.getY() + 40, 1, 0, power, speed));
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("prawa", rodzaj_pocisku), player2.getX() + hitBoxTank[0],
+						player2.getY() + (int)(hitBoxTank[1]/2)-5, 1, 0, power, speed));
 			else if (strzal[1] == -1 && strzal[2] == 0)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("lewa", rodzaj_pocisku), player2.getX() - 120,
-						player2.getY() + 40, -1, 0, power, speed));
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("lewa", rodzaj_pocisku), player2.getX() - hitBoxTank[0],
+						player2.getY() + (int)(hitBoxTank[1]/2)-5, -1, 0, power, speed));
 			else if (strzal[1] == 0 && strzal[2] == -1)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("gora", rodzaj_pocisku), player2.getX() + 40,
-						player2.getY() - 120, 0, -1, power, speed));
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("gora", rodzaj_pocisku), player2.getX() + hitBoxTank[0],
+						player2.getY() - (int)(hitBoxTank[1]/2)-5, 0, -1, power, speed));
 			else if (strzal[1] == 0 && strzal[2] == 1)
-				lista.add(new Bullet(odwrocony_obrazek_strzalu("dol", rodzaj_pocisku), player2.getX() + 40,
-						player2.getY() + 120, 0, 1, power, speed));
+				lista.add(new Bullet(odwrocony_obrazek_strzalu("dol", rodzaj_pocisku), player2.getX() + hitBoxTank[0],
+						player2.getY() + (int)(hitBoxTank[1]/2)-5, 0, 1, power, speed));
 		} catch (Exception e) {
 			Log.d("przycisk", e.getMessage());
 		}
