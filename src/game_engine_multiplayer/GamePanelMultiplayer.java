@@ -110,8 +110,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		// we can safely start the game loop
 		thread.setRunning(true);
 		thread.start();
-		player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank), 30, 40, 30, 100, 100);
-		player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank), 60, 40, 30, 100, 100);
+		player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank2), 30, 40, 30, 100, 100);
+		player2 = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank2), 60, 40, 30, 100, 100);
 		player.setPlaying(true);
 		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
@@ -177,7 +177,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		if (i[0]==0) {
 			ostatniRuchczolgu="lewa";
 			player2.setLeft(true);
-
+			
 		} else if (i[0]==2) {
 			ostatniRuchczolgu="prawa";
 			player2.setRight(true);
@@ -410,7 +410,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private Bitmap odwrocony_obrazek_strzalu(String kierunek, String rodzaj_pocisku) {
 		int obroc = 0;
 		Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
-		;
 		if (kierunek.equals("lewa")) {
 			obroc = 180;
 		} else if (kierunek.equals("dol")) {
@@ -441,7 +440,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height, matrix, true);
 		return resizedBitmap;
 	}
-
+	
 	public void gui() {
 		/**
 		 * MEtoda dziala w watku do wyswietlania hp ale nie wiem jakim cudem wie
