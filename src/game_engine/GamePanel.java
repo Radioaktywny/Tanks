@@ -167,7 +167,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			explosion.update();
 		if(explosion1!=null)explosion1.update();
     		bot_strzelaj();//musialem mu tu wrzucic :(
-    		int licz=1;
     		player2.update(player);    		
     		checkMove(player);
     		try{
@@ -204,10 +203,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 				player.update();
 		}
 	}
-    	
-
-    
-   
+    	   
     private void bot_strzelaj() 
     {
     int power=10;

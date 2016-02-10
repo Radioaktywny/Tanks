@@ -20,7 +20,6 @@ import android.widget.TextView;
 import bluetooth.ClientBluetooth;
 import bluetooth.PrepareToMultiplayer;
 import bluetooth.SerwerBluetooth;
-import game_engine.Background;
 import game_engine.Bullet;
 import game_engine.Explosion;
 import game_engine.Player;
@@ -33,7 +32,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private TextView txtplayerHP;
 	private TextView txtprzeciwnikHP;
 	private MainThreadMultiplayer thread;
-	private Background bg;
 	private Player player;
 	private JoystickView joystick;
 	Handler handgamepanel;
@@ -224,14 +222,10 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			explosion.update();
 		if(explosion1!=null)explosion1.update();
 		if (player.getPlaying()) {
-			// bg.update();
+			
 			checkMove(player);
 			checkMove(player2);
-			// Log.d("METRYCKA",""); tu na dole dostosowalem do swojego ekrany
-			// narazie nie zrpobilem auto pobierania rozmiaru
-			// Log.d("PLAYER", "X"+String.valueOf(player.getX()) +
-			// "Y"+String.valueOf(player.getY()));
-			// x10
+			
 			try {
 				if (!lista.isEmpty()) {
 					for (int i = 0; i < lista.size(); i++) {
