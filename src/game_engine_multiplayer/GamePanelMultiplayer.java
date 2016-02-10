@@ -50,6 +50,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private double scaleBTM[]=new double[2];
 	private int hitBoxTank[]=new int[2];
 	private int explosionBox[]=new int[2];
+	private Explosion explosion1;
 	public GamePanelMultiplayer(Context context, View v2, SerwerBluetooth serwer) {
 		super(context);
 		v = v2;
@@ -221,6 +222,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	public void update() {
 		if (explosion != null)
 			explosion.update();
+		if(explosion1!=null)explosion1.update();
 		if (player.getPlaying()) {
 			// bg.update();
 			checkMove(player);
@@ -284,6 +286,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			}
 			if (explosion != null)
 				explosion.draw(canvas);
+			if (explosion1 != null)
+				explosion1.draw(canvas);
 			canvas.restoreToCount(savedState);
 		}
 	}
@@ -296,8 +300,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			if (zakresX >= -hitBoxTank[0] && zakresX <= 0 && zakresY >= -hitBoxTank[1] && zakresY <= 0) {
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "BOT:"
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
-				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), 64,64,/*explosionBox[0], explosionBox[1],*/ 16);
+				explosion1 = new Explosion(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.explosion)),explosionBox[0]*4, explosionBox[1]*4,true),
+						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0],explosionBox[1],/*explosionBox[0], explosionBox[1],*/ 16);
 				player2.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -309,8 +313,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "PLEYER:"
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
-				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player.getX() +(int)((hitBoxTank[0]-explosionBox[0])/2) , player.getY() +(int)((hitBoxTank[1]-explosionBox[1])/2),64,64,/* explosionBox[0], explosionBox[1],*/ 16);
+				explosion1 = new Explosion(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.explosion)),explosionBox[0]*4, explosionBox[1]*4,true),
+						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0],explosionBox[1],/*explosionBox[0], explosionBox[1],*/ 16);
 
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
@@ -341,7 +345,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				lista.add(bullet);
 			} else if (ostatni_ruch_czolgu.equals("lewa")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() - hitBoxTank[0], player.getY() + (int)(hitBoxTank[1]/2) -5, -1, 0, power, speed));
+						player.getX() - hitBoxTank[0]-3, player.getY() + (int)(hitBoxTank[1]/2) -5, -1, 0, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
@@ -349,7 +353,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 			} else if (ostatni_ruch_czolgu.equals("gora")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() - hitBoxTank[1], 0, -1, power, speed));
+						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() - hitBoxTank[1]-3, 0, -1, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
@@ -357,7 +361,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 			} else if (ostatni_ruch_czolgu.equals("dol")) {
 				lista.add(bullet = new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() + hitBoxTank[1], 0, 1, power, speed));
+						player.getX() + (int)(hitBoxTank[0]/2) -5, player.getY() + hitBoxTank[1]+5, 0, 1, power, speed));
 				if (serwer != null) {
 					serwer.wyslij(multiStrings.sendToThread(bullet));
 				} else
