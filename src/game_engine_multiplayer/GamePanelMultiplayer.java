@@ -4,35 +4,25 @@ import java.util.ArrayList;
 
 import com.example.tanks.R;
 import com.zerokol.views.JoystickView;
-import com.zerokol.views.JoystickView.OnJoystickMoveListener;
 
-import activities_menu.MainActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 import bluetooth.ClientBluetooth;
 import bluetooth.PrepareToMultiplayer;
 import bluetooth.SerwerBluetooth;
-import bot.Bot;
 import game_engine.Background;
 import game_engine.Bullet;
 import game_engine.Explosion;
-import game_engine.MainThread;
 import game_engine.Player;
 
 public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.Callback {
@@ -59,6 +49,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private Bitmap scaled;
 	private double scaleBTM[]=new double[2];
 	private int hitBoxTank[]=new int[2];
+	private int explosionBox[]=new int[2];
 	public GamePanelMultiplayer(Context context, View v2, SerwerBluetooth serwer) {
 		super(context);
 		v = v2;
@@ -70,7 +61,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		joystick = (JoystickView) findViewById(R.id.joystickView);
 		// make gamePanel focusable so it can handle events
 		setFocusable(true);
-
+		
 	}
 
 	public GamePanelMultiplayer(Context context, View v2, ClientBluetooth client) {
@@ -121,6 +112,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		createBg();
+		createSizeOfExplosion();
 		//to s¹ wymiary mojego ekranu w pikselach dzieki temu tworze proste zmienne do skalowania sprawdz czy ladnie Ci to chodzi xD
 		scaleBTM[1]=40.0/540.0;
 		scaleBTM[0]=40.0/897.0;
@@ -140,6 +132,14 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		txtprzeciwnikHP = (TextView) v.findViewById(R.id.przeciwnik_HP);
 		txtprzeciwnikHP.setText("BOT_HP:100");
 		txtplayerHP.setText("HP:100");
+	}
+
+	private void createSizeOfExplosion() {
+		// TODO Auto-generated method stub
+		scaleBTM[1]=64.0/540.0;
+		scaleBTM[0]=64.0/897.0;		
+		explosionBox[0]=(int)((float)getWidth() * scaleBTM[0]);
+		explosionBox[1]=(int)((float)getHeight() * scaleBTM[1]);
 	}
 
 	@Override
@@ -299,7 +299,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "BOT:"
 						+ String.valueOf(zmienny.getHealth() - lista.get(i).getPower()));
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player2.getX()-20, player2.getY() - 20, 64, 64, 16);
+						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0], explosionBox[1], 16);
 				player2.setHealth(lista.get(i).getPower());
 				lista.remove(i);
 			}
@@ -312,7 +312,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
 				explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.explosion),
-						player.getX() -20 , player.getY() - 20, 64, 64, 16);
+						player.getX() +(int)((hitBoxTank[0]-explosionBox[0])/2) , player.getY() +(int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0], explosionBox[1], 16);
 
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
