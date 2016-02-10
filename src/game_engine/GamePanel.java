@@ -84,7 +84,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 	  // we can safely start the game loop
       thread.setRunning(true);
       thread.start();
-      player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),30,40,30,100,100);
+      player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.tank),30,40,30,100,100,10);
       player2 = new Bot(BitmapFactory.decodeResource(getResources(), R.drawable.tank),100,400,30,100,100);
       player.setPlaying(true);
       txtplayerHP= (TextView) v.findViewById(R.id.player_HP);

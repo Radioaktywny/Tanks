@@ -21,8 +21,8 @@ public class Player extends GameObject {
 	private int speed;
 	private Bitmap imagelast;
 
-	public Player(Bitmap res, int width, int height, int numFrames, int armor, int health) {
-		speed = 10;
+	public Player(Bitmap res, int width, int height, int numFrames, int armor, int health,int speed) {
+		this.speed = speed;
 		x = 200;
 		y = 200;
 

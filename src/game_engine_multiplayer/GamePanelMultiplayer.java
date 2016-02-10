@@ -125,8 +125,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 		thread.setRunning(true);
 		thread.start();
-		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100);
-		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100);
+		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
+		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
 		player.setPlaying(true);
 		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
@@ -328,10 +328,10 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			int speed = 1;
 			int power = 1;
 			if (rodzaj_pocisku.equals("pocisk_1")) {
-				speed = 13;
+				speed = (int)(hitBoxTank[0]/3);
 				power = 10;
 			} else if (rodzaj_pocisku.equals("nuke")) {
-				speed = 10;
+				speed = (int)(hitBoxTank[0]/4);
 				power = 50;
 			}
 			if (ostatni_ruch_czolgu.equals("prawa")) {
@@ -380,11 +380,11 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			int speed = 1;
 			int power = 1;
 			if (strzal[0] == 10) {
-				speed = 13;
+				speed = (int)(hitBoxTank[0]/3);;
 				power = 10;
 				rodzaj_pocisku = "pocisk_1";
 			} else if (strzal[0] == 50) {
-				speed = 10;
+				speed = (int)(hitBoxTank[0]/4);;
 				power = 50;
 				rodzaj_pocisku = "nuke";
 			}
