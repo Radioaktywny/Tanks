@@ -212,7 +212,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     {
     int power=10;
     int speed = (int)(hitBoxTank[0]/3);
-	if(player2.getX() >= player.getX()-3&&player2.getX() <= player.getX()+3)
+	if(player2.getX() > player.getX()-(speed/2)&&player2.getX() < player.getX()+(speed/2))
 	{
 		if(player2.getY() < player.getY())
 		{
@@ -223,7 +223,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 			lista.add(new Bullet(odwrocony_obrazek_strzalu("gora", "pocisk_1"), player2.getX() + (int)(hitBoxTank[0]/2) -5, player2.getY() - hitBoxTank[1]-3, 0, -1, power, speed));
 		}
 	} 
-	if(player2.getY() >= player.getY()-3&&player2.getY() <= player.getY()+3)
+	if(player2.getY() > player.getY()-(speed/2)&&player2.getY() < player.getY()+(speed/2))
 	{
 		if(player2.getX() < player.getX())
 		{
