@@ -313,8 +313,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				Log.d("dostal", "X " + String.valueOf(zakresX) + "Y " + String.valueOf(zakresY) + "zycie" + "PLEYER:"
 						+ String.valueOf(player.getHealth() - lista.get(i).getPower()));
 
-				explosion1 = new Explosion(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.explosion)),explosionBox[0]*4, explosionBox[1]*4,true),
-						player2.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player2.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0],explosionBox[1],/*explosionBox[0], explosionBox[1],*/ 16);
+				explosion = new Explosion(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.explosion)),explosionBox[0]*4, explosionBox[1]*4,true),
+						player.getX()+(int)((hitBoxTank[0]-explosionBox[0])/2), player.getY() + (int)((hitBoxTank[1]-explosionBox[1])/2), explosionBox[0],explosionBox[1],/*explosionBox[0], explosionBox[1],*/ 16);
 
 				player.setHealth(lista.get(i).getPower());
 				lista.remove(i);
