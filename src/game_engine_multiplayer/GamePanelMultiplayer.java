@@ -275,8 +275,8 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		if(explosion1!=null)explosion1.update();
 		if (player.getPlaying()) {
 			
-			checkMove(player);
-			checkMove(player2);
+			checkMove(player,ruch_czolgu);
+			checkMove(player2,ostatniRuchczolgu);
 			
 			try {
 				if (!lista.isEmpty()) {
@@ -291,7 +291,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		}
 	}
 
-	public void checkMove(Player player) {
+	public void checkMove(Player player,String ruch_czolgu) {
 		if (player.getY() > (int)(hitBoxTank[1]/2) && player.getY() < getHeight() - (int)((hitBoxTank[1]/2)*3) && player.getX() > (int)(hitBoxTank[0]/2)
 				&& player.getX() < getWidth() - (int)((hitBoxTank[0]/2)*3)) {
 			player.update();
