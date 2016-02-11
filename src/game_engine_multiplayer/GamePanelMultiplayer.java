@@ -120,9 +120,10 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		hitBoxTank[1]=(int)((float)getHeight() * scaleBTM[1]);
 		Log.d("INFO wymiar czolgu px", String.valueOf(hitBoxTank[0]));
 		Log.d("INFO wymiar czolgu px", String.valueOf(hitBoxTank[1]));
-
+		//do wywalenia
 		thread.setRunning(true);
 		thread.start();
+		
 		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
 		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
 		if(client!=null)
@@ -142,6 +143,46 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		txtprzeciwnikHP = (TextView) v.findViewById(R.id.przeciwnik_HP);
 		txtprzeciwnikHP.setText("BOT_HP:100");
 		txtplayerHP.setText("HP:100");
+		
+//		draw(this.getHolder().lockCanvas());
+//		startTheGame(holder);
+		
+		
+	}
+
+	private void startTheGame(SurfaceHolder holder) {		
+		
+				if(client!=null)
+				{
+				while(!client.connected)
+				{
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+				thread.setRunning(true);
+				thread.start();
+				}
+				else
+				{
+					while(!serwer.connected)
+					{
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+					thread.setRunning(true);
+					thread.start();
+				}
+
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void createSizeOfExplosion() {

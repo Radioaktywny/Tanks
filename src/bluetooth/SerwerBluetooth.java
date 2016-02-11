@@ -19,6 +19,7 @@ public class SerwerBluetooth implements Runnable  {
 	private volatile String danedowyslania="brak";
 	boolean isFree=true;
 	private volatile static PrintWriter out;
+	public volatile static boolean connected=false;
     public SerwerBluetooth() {
     	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();     
         BluetoothServerSocket tmp = null;
@@ -58,7 +59,7 @@ public class SerwerBluetooth implements Runnable  {
             	Log.d("INFO","Czekam na połączenie od clienta");
                 socket = mmServerSocket.accept();
                 Log.d("INFO","Mam clienta!");
-                
+                connected=true;
                 out = new PrintWriter(socket.getOutputStream(),true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              //   int i=0;

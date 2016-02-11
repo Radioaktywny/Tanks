@@ -109,7 +109,7 @@ public class Game extends Activity implements OnTouchListener{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();}
-	    //   mPlayer.start();
+	      mPlayer.start();
 	}
 	private void init_joistick(JoystickView joystick){
 		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
@@ -200,7 +200,7 @@ public class Game extends Activity implements OnTouchListener{
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-	//	mPlayer.start();
+		mPlayer.start();
 		super.onResume();
 	}
 	public int getMetrics(String x_or_y)

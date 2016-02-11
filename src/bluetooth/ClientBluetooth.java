@@ -17,6 +17,7 @@ public class ClientBluetooth implements Runnable{
     private volatile static String odebrane="brak";
     private volatile String danedowyslania="brak";
     private volatile static PrintWriter out;
+    public volatile static boolean connected=false;
     public ClientBluetooth(BluetoothDevice device) {       
         BluetoothSocket tmp = null;
         mmDevice = device;
@@ -46,6 +47,7 @@ public class ClientBluetooth implements Runnable{
         	Log.d("INFO","Próba po³¹czenia");
         	BluetoothAdapter.getDefaultAdapter();
             mmSocket.connect();
+            connected=true;
             Log.d("INFO","Po³¹czono z socketem");
             BufferedReader in = new BufferedReader(new InputStreamReader(mmSocket.getInputStream()));
             out = new PrintWriter(mmSocket.getOutputStream(),true);

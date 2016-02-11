@@ -90,10 +90,10 @@ public class ClientFragment extends Fragment implements ListAdapter {
 				String status = "";
 				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 					status = "nie sparowane";
-					niesparowane.add(device.getAddress());
+					niesparowane.add(device.getName());
 				} else {
 					status = "sparowane";
-					sparowane.add(device.getAddress());
+					sparowane.add(device.getName());
 				}
 				Log.d("INFO",
 						"znaleziono urządzenie: " + device.getName() + " - " + device.getAddress() + " - " + status);
@@ -137,7 +137,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 			if (pairedDevices.size() > 0) {
 				for (BluetoothDevice device : pairedDevices) {
 					Log.d("INFO", device.getName() + " - " + device.getAddress());
-					sparowane.add(device.getAddress());
+					sparowane.add(device.getName());
 				}
 			}
 			adaArr = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1,sparowane);
@@ -149,13 +149,23 @@ public class ClientFragment extends Fragment implements ListAdapter {
 	{
 		if(sparowane.contains(MAC))
 		{
-		
-		Game_multiplayer gm= new Game_multiplayer();
-		Intent activity= new Intent(getActivity(),gm.getClass());
-		activity.putExtra("MAC", MAC);
-		//Intent activity= new Intent(MainActivity.this,JoystickViewDemoActivity.class);
-		startActivity(activity); 
-		getActivity().finish();
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+			if (pairedDevices.size() > 0) {
+				for (BluetoothDevice device : pairedDevices) {
+					Log.d("INFO", device.getName() + " - " + device.getAddress());
+					if(MAC.equals(device.getName().toString()))
+					{
+						MAC=device.getAddress();
+						Game_multiplayer gm= new Game_multiplayer();
+						Intent activity= new Intent(getActivity(),gm.getClass());
+						activity.putExtra("MAC", MAC);
+						startActivity(activity); 
+						getActivity().finish();
+						break;
+					}
+				}
+			}		
 		}
 		else
 		{
