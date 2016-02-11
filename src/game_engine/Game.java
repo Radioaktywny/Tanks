@@ -115,6 +115,10 @@ public class Game extends Activity implements OnTouchListener{
 		joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
 			@Override
 			public void onValueChanged(int angle, int power, int direction) {
+				if(gameView.koniecgry)
+					finish();
+				else
+				{
 				switch (direction) {
 				case JoystickView.FRONT:
 					Ostatni_ruch_czolgu="gora";
@@ -150,6 +154,7 @@ public class Game extends Activity implements OnTouchListener{
 					break;
 				default:
 					gameView.steruj("nie rob nic prosze cie");
+				}
 				}
 			}
 		}, JoystickView.DEFAULT_LOOP_INTERVAL);

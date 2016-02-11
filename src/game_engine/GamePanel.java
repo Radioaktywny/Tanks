@@ -48,6 +48,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 	private int hitBoxTank[] = new int[2];
 	private int explosionBox[] = new int[2];
 	private Explosion explosion1;
+	protected boolean koniecgry=false;
 
 	public GamePanel(Context context, View v2) {
 		super(context);
@@ -181,13 +182,45 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 	}
 
-	private void przegrales(Canvas canvas) {
-		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.przegrales),
-				(int) ((float) getWidth() / 4.0), (int) ((float) getHeight() / 4.0), null);
-		new Thread() {
-			public void run() {
+	private void przegrales(Canvas canvas) 
+	{
+		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.przegrales),(int)((float)getWidth()/4.0),(int)((float)getHeight()/4.0),null);
+		new Thread(){
+				public void run()
+				{
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					boolean retry = true;
+					while (retry) {
+						try {
+							thread.setRunning(false);
+							thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						retry = false;
+					}
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					koniecgry=true;
+		}}.start();
+	}
+
+	private void wygrales(Canvas canvas) {		
+		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wygrales),(int)((float)getWidth()/4.0),(int)((float)getHeight()/4.0),null);
+		new Thread(){
+			public void run()
+			{
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -202,38 +235,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 					}
 					retry = false;
 				}
-
-			}
-		}.start();
-	}
-
-	private void wygrales(Canvas canvas) {
-		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wygrales),
-				(int) ((float) getWidth() / 4.0), (int) ((float) getHeight() / 4.0), null);
-		new Thread() {
-			public void run() {
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				boolean retry = true;
-				while (retry) {
-					try {
-						thread.setRunning(false);
-						thread.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					retry = false;
-				}
-
-			}
-		}.start();
-
+				koniecgry=true;
+	}}.start();
+		
 	}
-
 	public void checkMove(Player player) {
 		if (player.getY() > (int) (hitBoxTank[1] / 2) && player.getY() < getHeight() - (int) ((hitBoxTank[1] / 2) * 3)
 				&& player.getX() > (int) (hitBoxTank[0] / 2)

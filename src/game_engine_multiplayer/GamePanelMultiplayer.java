@@ -38,7 +38,6 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private Explosion explosion;
 	private ArrayList<Bullet> lista = new ArrayList();
 	private Player player2;
-	private int[] zakres = new int[2];
 	boolean dostelem = false;
 	SerwerBluetooth serwer = null;
 	ClientBluetooth client = null;
@@ -49,6 +48,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 	private int hitBoxTank[]=new int[2];
 	private int explosionBox[]=new int[2];
 	private Explosion explosion1;
+	protected volatile boolean koniecgry=false;
 	public GamePanelMultiplayer(Context context, View v2, SerwerBluetooth serwer) {
 		super(context);
 		v = v2;
@@ -308,7 +308,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				public void run()
 				{
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -323,7 +323,13 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 						}
 						retry = false;
 					}
-			
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					koniecgry=true;
 		}}.start();
 	}
 
@@ -333,7 +339,7 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 			public void run()
 			{
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -348,7 +354,13 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 					}
 					retry = false;
 				}
-		
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				koniecgry=true;
 	}}.start();
 		
 	}
