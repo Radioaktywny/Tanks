@@ -38,7 +38,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 	private Button b_up,b_down,b_left,b_right;
 	private ImageView tank;
 	private String kierunek="nic";
-	private String Ostatni_ruch_czolgu;
+	private String Ostatni_ruch_czolgu="lewa";
 	FrameLayout game;
 	RelativeLayout GameButtons;
 	public JoystickView joystick;
@@ -146,7 +146,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 					break;
 				case JoystickView.FRONT_RIGHT:
 					gameView.steruj("");
-					Ostatni_ruch_czolgu="";
+					//Ostatni_ruch_czolgu="";
 					break;
 				case JoystickView.LEFT:
 					gameView.steruj("prawa");
@@ -154,7 +154,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 					break;
 				case JoystickView.RIGHT_BOTTOM:
 					gameView.steruj("");
-					Ostatni_ruch_czolgu="";
+					//Ostatni_ruch_czolgu="";
 					break;
 				case JoystickView.BOTTOM:
 					Ostatni_ruch_czolgu="dol";
@@ -162,7 +162,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 					
 					break;
 				case JoystickView.BOTTOM_LEFT:
-					Ostatni_ruch_czolgu="";
+					//Ostatni_ruch_czolgu="";
 					gameView.steruj("");
 					break;
 				case JoystickView.RIGHT:

@@ -31,13 +31,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 	// public TextView txtplayerHP;
 	// public TextView txtprzeciwnikHP;
 	private View v;
+	private String ostatni_ruch_czolgu="lewa";
 	private String ruch_czolgu;
 	private TextView txtplayerHP;
 	private TextView txtprzeciwnikHP;
 	private MainThread thread;
 	private Player player;
 	private JoystickView joystick;
-	Handler handgamepanel;
+	private Handler handgamepanel;
 	private Explosion explosion;
 	private ArrayList<Bullet> lista = new ArrayList();
 	private Bot player2;
@@ -138,18 +139,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 		if (steruj.equals("lewa")) {
 			player.setLeft(true);
-
+			ostatni_ruch_czolgu=steruj;
 		} else if (steruj.equals("prawa")) {
 			player.setRight(true);
-
+			ostatni_ruch_czolgu=steruj;
 		} else if (steruj.equals("dol")) {
 			player.setDown(true);
-
+			ostatni_ruch_czolgu=steruj;
 		}
-
 		else if (steruj.equals("gora")) {
 			player.setUp(true);
-
+			ostatni_ruch_czolgu=steruj;
 		} else {
 			player.setNo();
 		}
@@ -361,7 +361,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	public void strzel(String ostatni_ruch_czolgu, String rodzaj_pocisku) {
+	public void strzel(String rodzaj_pocisku) {
 		try {
 			int speed = 1;
 			int power = 1;

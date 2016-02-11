@@ -77,7 +77,7 @@ public class Game extends Activity implements OnTouchListener{
 		imageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				gameView.strzel(Ostatni_ruch_czolgu,"pocisk_1");				
+				gameView.strzel("pocisk_1");				
 			}
 		});
 		imageButton.setOnLongClickListener(new OnLongClickListener() {
@@ -85,7 +85,7 @@ public class Game extends Activity implements OnTouchListener{
 			
 			@Override
 			public boolean onLongClick(View v) {
-				gameView.strzel(Ostatni_ruch_czolgu,"nuke");
+				gameView.strzel("nuke");
 				return true;
 			}
 		});
