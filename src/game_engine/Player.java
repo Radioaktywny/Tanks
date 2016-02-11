@@ -50,6 +50,11 @@ public class Player extends GameObject {
 		up = b;
 
 	}
+	public void setxy(int[]xy)
+	{
+		x=xy[0];
+		y=xy[1];
+	}
 
 	public void setDown(boolean b) {
 		down = b;

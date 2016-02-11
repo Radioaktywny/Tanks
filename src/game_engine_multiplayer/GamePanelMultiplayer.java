@@ -125,6 +125,17 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 		thread.start();
 		player = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
 		player2 = new Player(Bitmap.createScaledBitmap((BitmapFactory.decodeResource(getResources(), R.drawable.tank2)),hitBoxTank[0],hitBoxTank[1],true), 40, 40, 30, 100, 100,(int)(hitBoxTank[0]/7));
+		if(client!=null)
+		{
+			player.setxy(new int[]{hitBoxTank[0]*3,hitBoxTank[1]*5});
+			player2.setxy(new int[]{hitBoxTank[0]*15,hitBoxTank[1]*5});
+		}
+		else
+		{
+			player2.setxy(new int[]{hitBoxTank[0]*3,hitBoxTank[1]*5});
+			player.setxy(new int[]{hitBoxTank[0]*15,hitBoxTank[1]*5});
+			
+		}
 		player.setPlaying(true);
 		player2.setPlaying(true);
 		txtplayerHP = (TextView) v.findViewById(R.id.player_HP);
@@ -267,8 +278,12 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 			if (player2.getHealth() > 0)
 				player2.draw(canvas);
+			else
+				wygrales(canvas);
 			if (player.getHealth() > 0)
 				player.draw(canvas);
+			else
+				przegrales(canvas);
 			if (!lista.isEmpty()) {
 				for (int i = 0; i < lista.size(); i++) {
 					lista.get(i).draw(canvas);
@@ -284,6 +299,58 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 				explosion1.draw(canvas);
 			canvas.restoreToCount(savedState);
 		}
+	}
+
+	private void przegrales(Canvas canvas) 
+	{
+		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.przegrales),(int)((float)getWidth()/4.0),(int)((float)getHeight()/4.0),null);
+		new Thread(){
+				public void run()
+				{
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					boolean retry = true;
+					while (retry) {
+						try {
+							thread.setRunning(false);
+							thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						retry = false;
+					}
+			
+		}}.start();
+	}
+
+	private void wygrales(Canvas canvas) {		
+		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wygrales),(int)((float)getWidth()/4.0),(int)((float)getHeight()/4.0),null);
+		new Thread(){
+			public void run()
+			{
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				boolean retry = true;
+				while (retry) {
+					try {
+						thread.setRunning(false);
+						thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					retry = false;
+				}
+		
+	}}.start();
+		
 	}
 
 	private void sprawdz_czy_trafilem(boolean Czy_jestem_graczem, int i, Canvas canvas) {

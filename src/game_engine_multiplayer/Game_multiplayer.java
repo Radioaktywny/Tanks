@@ -48,7 +48,7 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 	Handler handgame ;
 	private MediaPlayer mPlayer;
 	private String MAC;
-	
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

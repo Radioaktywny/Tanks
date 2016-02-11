@@ -28,7 +28,7 @@ public class Explosion {
             	row++;
             image[i] = Bitmap.createBitmap(spritesheet, (i-(4*row))*width, row*height, width, height);
         }
-        animation.setDelay(50);
+        animation.setDelay(10);
         animation.setFrames(image);
     }
     public void draw(Canvas canvas)
