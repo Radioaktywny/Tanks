@@ -48,7 +48,7 @@ public class ClientFragment extends Fragment implements ListAdapter {
 	}
 	private void init(View rootView)
 	{
-		b1 = (Button) rootView.findViewById(R.id.button1);
+		b1 = (Button) rootView.findViewById(R.id.button11);
 		b3 = (Button) rootView.findViewById(R.id.button3);
 		listView = (ListView) rootView.findViewById(R.id.listView1);
 		progres= (ProgressBar)rootView.findViewById(R.id.progressBar1);

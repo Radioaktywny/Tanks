@@ -58,7 +58,7 @@ public class Game extends Activity implements OnTouchListener{
 	        View v = getLayoutInflater().inflate(R.layout.przyciski_layout, null);   
 		game = new FrameLayout(this);  
 		gameView = new GamePanel(this ,v); 
-
+		
 		GameButtons =new RelativeLayout(this);
 		RelativeLayout GameButtons = new RelativeLayout(this);	
 		

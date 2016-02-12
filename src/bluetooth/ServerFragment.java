@@ -22,7 +22,7 @@ public class ServerFragment extends Fragment implements OnClickListener{
 
 		View rootView = inflater.inflate(R.layout.server_widok, container, false);
 		 //t2= (TextView)rootView.findViewById(R.id.textView2);
-		 b2= (Button)rootView.findViewById(R.id.button2);
+		 b2= (Button)rootView.findViewById(R.id.button10);
 		 dajSieWykryc();	
 		 b2.setOnClickListener(new OnClickListener() {
 

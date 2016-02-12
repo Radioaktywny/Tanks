@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="#99FFCC">
+    android:background="@drawable/tlonoob_podmenu">
 
  <Button
         android:id="@+id/button3"
@@ -12,16 +12,16 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="Pokaż sparowane" 
+        android:background="@xml/sparowane"
         />
 
  <Button
-     android:id="@+id/button1"
+     android:id="@+id/button11"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:layout_below="@+id/button3"
      android:layout_centerHorizontal="true"
-     android:text="szukaj urzadzen" />
+    android:background="@xml/urzadzenia" />
 
  <ListView
      android:id="@+id/listView1"
