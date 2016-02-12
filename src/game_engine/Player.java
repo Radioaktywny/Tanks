@@ -46,43 +46,44 @@ public class Player extends GameObject {
 
 	}
 
-	public void setUp(boolean b) {
-		up = b;
-
-	}
+	
 	public void setxy(int[]xy)
 	{
 		x=xy[0];
 		y=xy[1];
 	}
+	public void setDIRECTION(boolean gora, boolean dol,boolean prawa,boolean lewa)
+	{
+		up=gora;
+		down=dol;
+		right=prawa;
+		left=lewa;
+	}
+	public void setUp(boolean b) {
+		up = b;
 
+	}
 	public void setDown(boolean b) {
 		down = b;
-		up = false;
-		right = false;
-		left = false;
-
+		
 	}
 
 	public void setLeft(boolean b) {
-		down = false;
-		up = false;
-		right = false;
+		
 		left = b;
 	}
 
 	public void setRight(boolean b) {
-		down = false;
-		up = false;
+		
 		right = b;
-		left = false;
+		
 
 	}
 
 	public void update() {
 		// long elapsed = (System.nanoTime()-startTime)/1000000;
 		// animation.update();
-
+		
 		if (up) {
 			y = y - speed;
 		}
@@ -95,25 +96,43 @@ public class Player extends GameObject {
 		if (left) {
 			x = x - speed;
 		}
+		
 
 	}
 
 	public String getKierunek() {
-		if (up)
+	
+		if (up) 
+		{
+			if(right)
+				return "gora prawa";
+			else if(left)
+				return "gora lewa";
+			else
 			return "gora";
-		else if (down)
-			return "dol";
-		else if (left)
-			return "lewa";
-		else if (right)
+		}
+		else if (down) 
+		{
+			if(right)
+				return "dol prawa";
+			else if(left)
+				return "dol lewa";
+			else
+			return"dol";
+		}
+		else if(right)
 			return "prawa";
-		return null;
+		else if(left)
+			return "lewa";
+		else
+			return null;
 	}
 
 	public void draw(Canvas canvas) {
 		if (getKierunek() != null)
 			imagelast = odwroc_czolg(getKierunek());
 		canvas.drawBitmap(imagelast, x, y, null);
+		
 	}
 
 	public int getHealth() {
@@ -143,13 +162,25 @@ public class Player extends GameObject {
 
 	private Bitmap odwroc_czolg(String kierunek) {
 		int obroc = 0;
-		if (kierunek.equals("prawa")) {
-			obroc = 180;
-		} else if (kierunek.equals("dol")) {
+		if (kierunek.contains("dol")) 
+		{
+			if(kierunek.contains("prawa"))
+				obroc=225;
+			else if(kierunek.contains("lewa"))
+				obroc=315;
+			else
 			obroc = 270;
-		} else if (kierunek.equals("gora")) {
+		} else if (kierunek.contains("gora")) 
+		{
+			if(kierunek.contains("prawa"))
+				obroc=135;
+			else if(kierunek.contains("lewa"))
+				obroc=45;
+			else
 			obroc = 90;
 		}
+		else if(kierunek.contains("prawa"))
+			obroc=180;
 		int width = spritesheet.getWidth();
 		int height = spritesheet.getHeight();
 		int newWidth = spritesheet.getWidth();

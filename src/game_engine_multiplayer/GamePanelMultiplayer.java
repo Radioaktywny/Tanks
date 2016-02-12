@@ -201,23 +201,23 @@ public class GamePanelMultiplayer extends SurfaceView implements SurfaceHolder.C
 
 	public void steruj(String steruj) {
 		ruch_czolgu = steruj;
-
-		if (steruj.equals("lewa")) {
+		player.setNo();
+		if (steruj.contains("lewa")) {
 			player.setLeft(true);
 			multiStrings.setDirectionToSend(new int[] { 0, 1 });
 
-		} else if (steruj.equals("prawa")) {
+		} if (steruj.contains("prawa")) {
 			player.setRight(true);
 			multiStrings.setDirectionToSend(new int[] { 2, 1 });
 
-		} else if (steruj.equals("dol")) {
+		} if (steruj.contains("dol")) {
 			player.setDown(true);
 			multiStrings.setDirectionToSend(new int[] { 1, 0 });
-		} else if (steruj.equals("gora")) {
+		} if (steruj.contains("gora")) {
 			player.setUp(true);
 			multiStrings.setDirectionToSend(new int[] { 1, 2 });
 
-		} else {
+		} if(steruj.contains("nie")) {
 			player.setNo();
 			multiStrings.setDirectionToSend(new int[] { 1, 1 });
 		}

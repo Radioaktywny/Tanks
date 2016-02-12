@@ -129,13 +129,26 @@ public class Bot extends GameObject{
 	}
 	private Bitmap odwroc_czolg(String kierunek) {
 		int obroc = 0;
-		if (kierunek.equals("prawa")) {
-			obroc = 180;
-		} else if (kierunek.equals("dol")) {
+		if (kierunek.equals("dol")) 
+		{
+			if(kierunek.equals("prawa"))
+				obroc=225;
+			else if(kierunek.equals("lewa"))
+				obroc=315;
+			else
 			obroc = 270;
-		} else if (kierunek.equals("gora")) {
+		} else if (kierunek.equals("gora")) 
+		{
+			if(kierunek.equals("prawa"))
+				obroc=135;
+			else if(kierunek.equals("lewa"))
+				obroc=45;
+			else
 			obroc = 90;
 		}
+		else if(kierunek.equals("prawa"))
+			obroc=180;
+		
 		int width = spritesheet.getWidth();
 		int height = spritesheet.getHeight();
 		int newWidth = spritesheet.getWidth();

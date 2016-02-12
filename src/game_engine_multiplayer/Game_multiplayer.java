@@ -144,33 +144,34 @@ public class Game_multiplayer extends Activity implements OnTouchListener{
 					Ostatni_ruch_czolgu="gora";
 					gameView.steruj("gora");
 					break;
-				case JoystickView.FRONT_RIGHT:
-					gameView.steruj("");
-					//Ostatni_ruch_czolgu="";
+				case JoystickView.LEFT_FRONT:
+					gameView.steruj("gora prawa");
+					Ostatni_ruch_czolgu="gora prawa";
 					break;
 				case JoystickView.LEFT:
 					gameView.steruj("prawa");
 					Ostatni_ruch_czolgu="prawa";
 					break;
-				case JoystickView.RIGHT_BOTTOM:
-					gameView.steruj("");
-					//Ostatni_ruch_czolgu="";
+				case JoystickView.BOTTOM_LEFT:
+					gameView.steruj("dol prawa");
+					Ostatni_ruch_czolgu="dol prawa";
 					break;
 				case JoystickView.BOTTOM:
 					Ostatni_ruch_czolgu="dol";
 					gameView.steruj("dol");
 					
 					break;
-				case JoystickView.BOTTOM_LEFT:
-					//Ostatni_ruch_czolgu="";
-					gameView.steruj("");
+				case JoystickView.RIGHT_BOTTOM:
+					Ostatni_ruch_czolgu="dol lewa";
+					gameView.steruj("dol lewa");
 					break;
 				case JoystickView.RIGHT:
 					Ostatni_ruch_czolgu="lewa";
 					gameView.steruj("lewa");
 					break;
-				case JoystickView.LEFT_FRONT:
-					gameView.steruj("");
+				case JoystickView.FRONT_RIGHT:
+					gameView.steruj("gora lewa");
+					Ostatni_ruch_czolgu="gora lewa";
 					break;
 				default:
 					gameView.steruj("nie rob nic prosze cie");

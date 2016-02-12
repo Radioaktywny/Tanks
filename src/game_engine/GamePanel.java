@@ -136,21 +136,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void steruj(String steruj) {
 		ruch_czolgu = steruj;
-
-		if (steruj.equals("lewa")) {
+		player.setNo();
+		if (steruj.contains("lewa")) {
 			player.setLeft(true);
 			ostatni_ruch_czolgu=steruj;
-		} else if (steruj.equals("prawa")) {
+		}  if (steruj.contains("prawa")) {
 			player.setRight(true);
 			ostatni_ruch_czolgu=steruj;
-		} else if (steruj.equals("dol")) {
+		}  if (steruj.contains("dol")) {
 			player.setDown(true);
 			ostatni_ruch_czolgu=steruj;
 		}
-		else if (steruj.equals("gora")) {
+		 if (steruj.contains("gora")) {
 			player.setUp(true);
 			ostatni_ruch_czolgu=steruj;
-		} else {
+		} if(steruj.contains("nie")) {
 			player.setNo();
 		}
 
@@ -372,39 +372,71 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 				speed = (int) (hitBoxTank[0] / 4);
 				power = 50;
 			}
-			if (ostatni_ruch_czolgu.equals("prawa"))
+			if (ostatni_ruch_czolgu.contains("dol")) 
+			{
+				if(ostatni_ruch_czolgu.contains("prawa"))
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() + hitBoxTank[1] + 5, 1, 1, power,
+							speed));
+				else if(ostatni_ruch_czolgu.contains("lewa"))
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() + hitBoxTank[1] + 5, -1, 1, power,
+							speed));
+				else
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() + hitBoxTank[1] + 5, 0, 1, power,
+							speed));
+			} else if (ostatni_ruch_czolgu.contains("gora")) 
+			{
+				if(ostatni_ruch_czolgu.contains("prawa"))
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() - hitBoxTank[1] - 3, 1, -1, power,
+							speed));
+				else if(ostatni_ruch_czolgu.contains("lewa"))
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() - hitBoxTank[1] - 3, -1, -1, power,
+							speed));
+				else
+					lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
+							player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() - hitBoxTank[1] - 3, 0, -1, power,
+							speed));
+			}
+			else if(ostatni_ruch_czolgu.contains("prawa"))
 				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
 						player.getX() + hitBoxTank[0] + 3, player.getY() + (int) (hitBoxTank[1] / 2)
-								- 5 /* do poprawy */,
-						1, 0, power, speed));
-			else if (ostatni_ruch_czolgu.equals("lewa"))
+						- 5 ,	1, 0, power, speed));
+			else
 				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
 						player.getX() - hitBoxTank[0] - 3, player.getY() + (int) (hitBoxTank[1] / 2) - 5, -1, 0, power,
-						speed));
-			else if (ostatni_ruch_czolgu.equals("gora"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() - hitBoxTank[1] - 3, 0, -1, power,
-						speed));
-			else if (ostatni_ruch_czolgu.equals("dol"))
-				lista.add(new Bullet(odwrocony_obrazek_strzalu(ostatni_ruch_czolgu, rodzaj_pocisku),
-						player.getX() + (int) (hitBoxTank[0] / 2) - 5, player.getY() + hitBoxTank[1] + 5, 0, 1, power,
-						speed));
+									speed));
+			
 		} catch (Exception e) {
 			// Log.d("przycisk", e.getMessage());
 		}
 	}
 
 	private Bitmap odwrocony_obrazek_strzalu(String kierunek, String rodzaj_pocisku) {
-		int obroc = 0;
 		Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
-		;
-		if (kierunek.equals("lewa")) {
-			obroc = 180;
-		} else if (kierunek.equals("dol")) {
-			obroc = 90;
-		} else if (kierunek.equals("gora")) {
-			obroc = 270;
-		}
+			int obroc = 0;
+			if (kierunek.contains("dol")) 
+			{
+				if(kierunek.contains("prawa"))
+					obroc=225;
+				else if(kierunek.contains("lewa"))
+					obroc=315;
+				else
+				obroc = 270;
+			} else if (kierunek.contains("gora")) 
+			{
+				if(kierunek.contains("prawa"))
+					obroc=135;
+				else if(kierunek.contains("lewa"))
+					obroc=45;
+				else
+				obroc = 90;
+			}
+			else if(kierunek.contains("prawa"))
+				obroc=180;
 		if (rodzaj_pocisku.equals("pocisk_1")) {
 			bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1);
 		} else if (rodzaj_pocisku.equals("nuke")) {
