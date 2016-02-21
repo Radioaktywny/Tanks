@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class Swip_menu extends PagerAdapter{
-	public int [] obrazkimenu = {R.drawable.online , R.drawable.offline };
+	public int [] obrazkimenu = {R.xml.online , R.xml.offline };
 	private Context context;
 	private LayoutInflater layoutinflator;
 	
