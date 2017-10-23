@@ -83,7 +83,6 @@ public class GameThreadTest {
 
     @NonNull
     private Thread givenStartedGameThread() {
-        testedClass = new GameThread(surfaceHolder, surfaceView);
         Thread thread = new Thread(testedClass);
         thread.start();
         return thread;

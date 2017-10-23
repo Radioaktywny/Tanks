@@ -13,7 +13,6 @@ public class GameThread implements Runnable {
     public static Canvas canvas;
 
     public GameThread(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
-        super();
         this.surfaceHolder = surfaceHolder;
         this.surfaceView = surfaceView;
         this.FPS = 30;
@@ -32,13 +31,6 @@ public class GameThread implements Runnable {
         }
     }
 
-    private void waitToMakeCorrectFPSNumber() throws InterruptedException {
-        long targetTime = 1000 / FPS;
-        long timeMillis = (System.nanoTime() - startTime) / 1000000;
-        long waitTime = targetTime - timeMillis;
-        Thread.sleep(waitTime);
-    }
-
     private void updateUI() {
         canvas = null;
         try {
@@ -50,14 +42,11 @@ public class GameThread implements Runnable {
         }
     }
 
-    private void unlockCanvasAndPost() {
-        if (canvas != null) {
-            try {
-                surfaceHolder.unlockCanvasAndPost(canvas);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    private void waitToMakeCorrectFPSNumber() throws InterruptedException {
+        long targetTime = 1000 / FPS;
+        long timeMillis = (System.nanoTime() - startTime) / 1000000;
+        long waitTime = targetTime - timeMillis;
+        Thread.sleep(waitTime);
     }
 
     private void lockCanvasAndUpdateUI() {
@@ -68,6 +57,16 @@ public class GameThread implements Runnable {
     private void updateAndDrawOnUI() {
         synchronized (surfaceHolder) {
             this.surfaceView.draw(canvas);
+        }
+    }
+
+    private void unlockCanvasAndPost() {
+        if (canvas != null) {
+            try {
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
