@@ -1,15 +1,18 @@
 package com.example.tanks.engine;
 
 import android.graphics.Canvas;
-import android.support.annotation.NonNull;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.reset;
@@ -23,48 +26,65 @@ import static org.mockito.Mockito.when;
 public class GameThreadTest {
 
     @Mock
-    SurfaceView surfaceView;
+    private SurfaceView surfaceView;
 
     @Mock
-    SurfaceHolder surfaceHolder;
+    private SurfaceHolder surfaceHolder;
 
     @Mock
-    Canvas canvas;
+    private Canvas canvas;
 
-    @InjectMocks
-    GameThread testedClass;
+    private GameThread testedClass;
+
+    private CountDownLatch countDownLatch;
 
     @BeforeMethod
     public void init() {
         MockitoAnnotations.initMocks(this);
-        when(surfaceHolder.lockCanvas()).thenReturn(canvas);
+        setupCounterForLockCanvasMethod();
         testedClass = new GameThread(surfaceHolder, surfaceView);
     }
 
+    private void setupCounterForLockCanvasMethod() {
+        countDownLatch = new CountDownLatch(5);
+        when(surfaceHolder.lockCanvas()).thenAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                countDownLatch.countDown();
+                return canvas;
+            }
+        });
+    }
+
     @Test
-    public void testIfStarted_ThenThreadIsRefreshingUI() {
-        Thread gameThread = givenStartedGameThread();
-        whenWaitForASecondAndInterruptGameThread(gameThread);
+    public void testIfStarted_ThenThreadIsRefreshingUI() throws InterruptedException {
+        Thread thread = givenStartedGameThread();
+        whenWaitForCountCounterDownAndInterrupt(thread, countDownLatch);
         thenThereWasSomeUI_UpdatesRecorded();
     }
 
     @Test
-    public void testIfInterrupted_ThenThreadIsNoMoreRefreshingUI() {
+    public void testIfInterrupted_ThenThreadIsNoMoreRefreshingUI() throws InterruptedException {
         Thread gameThread = givenStartedGameThread();
-        whenWaitForASecondAndInterruptGameThread(gameThread);
-        thenThereWasSomeUI_UpdatesRecorded();
-        whenWaitingForSomeTime(100);
-        reset(surfaceView,surfaceHolder);
-        whenWaitingForSomeTime(2000);
+        whenInterruptAndWaitForPossibleUIRefresh(gameThread, countDownLatch);
+        thenZeroRefreshOccursAfterInterrupt();
+    }
+
+    private void whenWaitForCountCounterDownAndInterrupt(Thread thread,
+                                                         CountDownLatch countDownLatch) throws InterruptedException {
+        countDownLatch.await(1000, TimeUnit.MILLISECONDS);
+        thread.interrupt();
+    }
+
+    private void thenZeroRefreshOccursAfterInterrupt() {
         verifyZeroInteractions(surfaceHolder, surfaceView);
     }
 
-    private void whenWaitingForSomeTime(int milis) {
-        try {
-            Thread.sleep(milis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void whenInterruptAndWaitForPossibleUIRefresh(Thread gameThread,
+                                                          CountDownLatch countDownLatch) throws InterruptedException {
+        gameThread.interrupt();
+        reset(surfaceView, surfaceHolder);
+        countDownLatch.await(1000, TimeUnit.MILLISECONDS);
     }
 
     private void thenThereWasSomeUI_UpdatesRecorded() {
@@ -72,16 +92,6 @@ public class GameThreadTest {
         verify(surfaceView, atLeastOnce()).draw(canvas);
     }
 
-    private void whenWaitForASecondAndInterruptGameThread(Thread thread) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        thread.interrupt();
-    }
-
-    @NonNull
     private Thread givenStartedGameThread() {
         Thread thread = new Thread(testedClass);
         thread.start();
