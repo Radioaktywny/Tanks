@@ -3,8 +3,8 @@ package com.example.tanks.engine;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.example.tanks.engine.model.DirectionOfMovement;
-import com.example.tanks.engine.model.Playable;
+import com.example.tanks.engine.model.DirectionConverter;
+import com.example.tanks.engine.model.GameObject;
 import com.example.tanks.engine.model.Player;
 import com.example.tanks.engine.model.Updatable;
 import com.zerokol.views.JoystickView;
@@ -17,11 +17,11 @@ import java.util.List;
  */
 public class GameConfiguration {
 
-    private Playable player;
+    private Player player;
 
-    private Playable bot;
+    private Player bot;
 
-    private List<Updatable> listOfGameObjects;
+    private List<GameObject> listOfGameObjects;
 
     GameConfiguration() {
         initPlayers();
@@ -30,7 +30,8 @@ public class GameConfiguration {
     private void initPlayers() {
         player = new Player(null, null, null);
         bot = new Player(null, null, null);
-        listOfGameObjects = Arrays.asList((Updatable) player, (Updatable) bot);
+        //todo this is comming to factory, do not know yet how to create hitbox
+        listOfGameObjects = Arrays.asList(player, (GameObject) bot);
         new BotController(bot);
     }
 
@@ -41,17 +42,17 @@ public class GameConfiguration {
     }
 
     void prepareShootButton(ImageButton shootButton) {
-        //todo add listeners
         shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                player.shoot(null, 1);
+                listOfGameObjects.add(ShootFactory.createSoftBullet(player));
             }
         });
+
         shootButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                player.shoot(null, 2);
+                listOfGameObjects.add(ShootFactory.createNukeBullet(player));
                 return true;
             }
         });
@@ -59,11 +60,9 @@ public class GameConfiguration {
 
     void prepareJoystick(JoystickView joystick) {
         joystick.setOnJoystickMoveListener(new JoystickView.OnJoystickMoveListener() {
-
             @Override
             public void onValueChanged(int angle, int power, int direction) {
-                player.changeDirection(DirectionOfMovement.DOWN);
-                //todo conversion betweeen direction and Direction of movement
+                player.changeDirection(DirectionConverter.convert(direction));
             }
         }, JoystickView.DEFAULT_LOOP_INTERVAL);
     }

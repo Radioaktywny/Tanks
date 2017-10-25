@@ -16,12 +16,7 @@ public class Player extends GameObject implements Playable {
     }
 
     @Override
-    public void shoot(DirectionOfMovement directionOfMovement, int type) {
-
-    }
-
-    @Override
     public void changeDirection(DirectionOfMovement directionOfMovement) {
-
+        super.changeDirection(directionOfMovement);
     }
 }

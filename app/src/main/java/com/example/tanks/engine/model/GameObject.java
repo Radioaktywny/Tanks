@@ -18,11 +18,24 @@ public abstract class GameObject implements Updatable {
 
     private DirectionOfMovement directionOfMovement;
 
+    protected abstract int speed();
+
+    protected void changeDirection(DirectionOfMovement directionOfMovement) {
+        this.directionOfMovement = directionOfMovement;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public DirectionOfMovement getDirectionOfMovement() {
+        return directionOfMovement;
+    }
+
+
     @Override
     public void move() {
         position = new Position(position.getWidth() + directionOfMovement.getX() * speed(),
                 position.getHeight() + directionOfMovement.getY() * speed());
     }
-
-    protected abstract int speed();
 }

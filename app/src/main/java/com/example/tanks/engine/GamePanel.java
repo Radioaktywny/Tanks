@@ -18,7 +18,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private final View viewForControls;
 
-    private GameConfiguration engine;
+    private GameConfiguration engineConfiguration;
 
     private Thread gameThread;
 
@@ -30,21 +30,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context, View viewForControls) {
         super(context);
         this.viewForControls = viewForControls;
-        engine = new GameConfiguration();
+        engineConfiguration = new GameConfiguration();
         initJoystickAndShootButton();
     }
 
     private void initJoystickAndShootButton() {
         joystick = (JoystickView) findViewById(R.id.joystickView);
         shootButton = (ImageButton) findViewById(R.id.strzal);
-        engine.prepareJoystick(joystick);
-        engine.prepareShootButton(shootButton);
+        engineConfiguration.prepareJoystick(joystick);
+        engineConfiguration.prepareShootButton(shootButton);
     }
 
 
     @Override
     public void draw(Canvas canvas) {
-        engine.updateGameObjects();
+        engineConfiguration.updateGameObjects();
         super.draw(canvas);
     }
 

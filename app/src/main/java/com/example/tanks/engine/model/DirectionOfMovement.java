@@ -12,7 +12,8 @@ public enum DirectionOfMovement {
     UP_LEFT(-1, 1),
     UP_RIGHT(1, 1),
     DOWN_RIGHT(1, -1),
-    DOWN_LEFT(-1, -1);
+    DOWN_LEFT(-1, -1),
+    NO_DIRECTION(0, 0);
 
     private int x;
 
