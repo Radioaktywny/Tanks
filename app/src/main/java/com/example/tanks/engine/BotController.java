@@ -8,6 +8,6 @@ import com.example.tanks.engine.model.Playable;
 
 class BotController {
     public BotController(Playable bot) {
-
+        //todo botcontroller
     }
 }

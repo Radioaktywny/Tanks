@@ -8,26 +8,26 @@ import com.zerokol.views.JoystickView;
 
 public class DirectionConverter {
 
-    public static DirectionOfMovement convert(int direction) {
+    public static Direction convert(int direction) {
         switch (direction) {
             case JoystickView.FRONT:
-                return DirectionOfMovement.UP;
+                return Direction.UP;
             case JoystickView.LEFT_FRONT:
-                return DirectionOfMovement.UP_RIGHT;
+                return Direction.UP_RIGHT;
             case JoystickView.LEFT:
-                return DirectionOfMovement.RIGHT;
+                return Direction.RIGHT;
             case JoystickView.BOTTOM_LEFT:
-                return DirectionOfMovement.DOWN_RIGHT;
+                return Direction.DOWN_RIGHT;
             case JoystickView.BOTTOM:
-                return DirectionOfMovement.DOWN;
+                return Direction.DOWN;
             case JoystickView.RIGHT_BOTTOM:
-                return DirectionOfMovement.DOWN_LEFT;
+                return Direction.DOWN_LEFT;
             case JoystickView.RIGHT:
-                return DirectionOfMovement.LEFT;
+                return Direction.LEFT;
             case JoystickView.FRONT_RIGHT:
-                return DirectionOfMovement.UP_LEFT;
+                return Direction.UP_LEFT;
             default:
-                return DirectionOfMovement.NO_DIRECTION;
+                return Direction.NO_DIRECTION;
         }
     }
 

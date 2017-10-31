@@ -4,7 +4,7 @@ package com.example.tanks.engine.model;
  * Created by Marcin on 19.10.2017.
  */
 
-public enum DirectionOfMovement {
+public enum Direction {
     UP(0, 1),
     DOWN(0, -1),
     LEFT(-1, 0),
@@ -19,7 +19,7 @@ public enum DirectionOfMovement {
 
     private int y;
 
-    DirectionOfMovement(int x, int y) {
+    Direction(int y, int x) {
         this.x = x;
         this.y = y;
     }

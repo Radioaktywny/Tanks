@@ -6,8 +6,8 @@ package com.example.tanks.engine.model;
 
 public class Player extends GameObject implements Playable {
 
-    public Player(Position position, HitBox hitBox, DirectionOfMovement directionOfMovement) {
-        super(position, hitBox, directionOfMovement);
+    public Player(Position position, Image image, Direction direction) {
+        super(position, image, direction);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class Player extends GameObject implements Playable {
     }
 
     @Override
-    public void changeDirection(DirectionOfMovement directionOfMovement) {
-        super.changeDirection(directionOfMovement);
+    public void changeDirection(Direction direction) {
+        super.changeDirection(direction);
     }
 }

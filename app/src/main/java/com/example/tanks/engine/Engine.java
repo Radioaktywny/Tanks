@@ -1,5 +1,6 @@
 package com.example.tanks.engine;
 
+import android.graphics.Canvas;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -15,22 +16,21 @@ import java.util.List;
 /**
  * Created by Marcin on 24.10.2017.
  */
-public class GameConfiguration {
+public class Engine {
 
+    private final BitmapsForGame bitmapsForGame;
     private Player player;
-
-    private Player bot;
 
     private List<GameObject> listOfGameObjects;
 
-    GameConfiguration() {
-        initPlayers();
+    Engine(BitmapsForGame bitmapsForGame) {
+        this.bitmapsForGame = bitmapsForGame;
+        initPlayers(this.bitmapsForGame);
     }
 
-    private void initPlayers() {
-        player = new Player(null, null, null);
-        bot = new Player(null, null, null);
-        //todo this is comming to factory, do not know yet how to create hitbox
+    private void initPlayers(BitmapsForGame bitmapsForGame) {
+        Player bot = PlayerFactory.createBot(bitmapsForGame.getPlayerBitmap());
+        player = PlayerFactory.createPlayer(bitmapsForGame.getPlayerBitmap());
         listOfGameObjects = Arrays.asList(player, (GameObject) bot);
         new BotController(bot);
     }
@@ -41,18 +41,24 @@ public class GameConfiguration {
         }
     }
 
+    void drawGameObjects(Canvas canvas){
+        for (Updatable gameObj: listOfGameObjects) {
+            gameObj.draw(canvas);
+        }
+    }
+
     void prepareShootButton(ImageButton shootButton) {
         shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listOfGameObjects.add(ShootFactory.createSoftBullet(player));
+                listOfGameObjects.add(ShootFactory.createSoftBullet(player, bitmapsForGame.getBulletSoftBitmap()));
             }
         });
 
         shootButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                listOfGameObjects.add(ShootFactory.createNukeBullet(player));
+                listOfGameObjects.add(ShootFactory.createNukeBullet(player, bitmapsForGame.getBulletNukeBitmap()));
                 return true;
             }
         });

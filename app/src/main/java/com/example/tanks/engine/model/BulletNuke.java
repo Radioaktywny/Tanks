@@ -6,8 +6,8 @@ package com.example.tanks.engine.model;
 
 public class BulletNuke extends GameObject {
 
-    public BulletNuke(Position position, HitBox hitBox, DirectionOfMovement directionOfMovement) {
-        super(position, hitBox, directionOfMovement);
+    public BulletNuke(Position position, Image image, Direction direction) {
+        super(position, image, direction);
     }
 
     @Override

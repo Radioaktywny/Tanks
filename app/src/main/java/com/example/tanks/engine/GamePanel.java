@@ -1,9 +1,10 @@
 package com.example.tanks.engine;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,7 +19,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private final View viewForControls;
 
-    private GameConfiguration engineConfiguration;
+    private Engine engine;
 
     private Thread gameThread;
 
@@ -30,21 +31,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context, View viewForControls) {
         super(context);
         this.viewForControls = viewForControls;
-        engineConfiguration = new GameConfiguration();
+        //viewforControls - potrzebne zeby pokazac Hp i takie tam
+        // co do tego co nizej to wyczytalem ze przekazywanie contextu do innych klas moze powodowac memory leaks
+        engine = new Engine(defineImagesUsedForGames());
         initJoystickAndShootButton();
+    }
+
+    //warto przemyslec jak by to zrobic w lepszy sposob
+    private BitmapsForGame defineImagesUsedForGames() {
+        return new BitmapsForGame(BitmapFactory.decodeResource(getResources(), R.drawable.tank2),
+                BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.pocisk_nuke));
     }
 
     private void initJoystickAndShootButton() {
         joystick = (JoystickView) findViewById(R.id.joystickView);
         shootButton = (ImageButton) findViewById(R.id.strzal);
-        engineConfiguration.prepareJoystick(joystick);
-        engineConfiguration.prepareShootButton(shootButton);
+        engine.prepareJoystick(joystick);
+        engine.prepareShootButton(shootButton);
     }
 
 
     @Override
     public void draw(Canvas canvas) {
-        engineConfiguration.updateGameObjects();
+        engine.updateGameObjects();
+        engine.drawGameObjects(canvas);
         super.draw(canvas);
     }
 

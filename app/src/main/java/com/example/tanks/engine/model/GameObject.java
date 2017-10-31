@@ -1,41 +1,54 @@
 package com.example.tanks.engine.model;
 
+import android.graphics.Canvas;
+
 /**
  * Created by Marcin on 24.10.2017.
  */
 
 public abstract class GameObject implements Updatable {
 
-    public GameObject(Position position, HitBox hitBox, DirectionOfMovement directionOfMovement) {
+    GameObject(Position position, Image image){
         this.position = position;
-        this.hitBox = hitBox;
-        this.directionOfMovement = directionOfMovement;
+        this.direction = Direction.NO_DIRECTION;
+        this.image=image;
+    }
+
+    GameObject(Position position, Image image, Direction direction) {
+        this.position = position;
+        this.image = image;
+        this.direction = direction;
     }
 
     private Position position;
 
-    private HitBox hitBox;
+    private Direction direction;
 
-    private DirectionOfMovement directionOfMovement;
+    private Image image;
 
     protected abstract int speed();
 
-    protected void changeDirection(DirectionOfMovement directionOfMovement) {
-        this.directionOfMovement = directionOfMovement;
+    protected void changeDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public Position getPosition() {
         return position;
     }
 
-    public DirectionOfMovement getDirectionOfMovement() {
-        return directionOfMovement;
+    public Direction getDirection() {
+        return direction;
     }
 
 
     @Override
     public void move() {
-        position = new Position(position.getWidth() + directionOfMovement.getX() * speed(),
-                position.getHeight() + directionOfMovement.getY() * speed());
+        position = new Position(position.getWidth() + direction.getX() * speed(),
+                position.getHeight() + direction.getY() * speed());
+    }
+
+    @Override
+    public void draw(Canvas canvas){
+        canvas.drawBitmap(image.getBitmap(), getPosition().getWidth(), getPosition().getHeight(), null);
     }
 }
